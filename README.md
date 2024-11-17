@@ -1,6 +1,6 @@
 # GerenciaPost
 
-adrões de Projeto Implementados
+Padrões de Projeto Implementados
 Este projeto utiliza quatro padrões de projeto principais para organizar e estruturar o código de forma eficiente, escalável e fácil de manter. Além disso conta com um singleton no banco de dados. Abaixo está uma descrição de cada padrão e como ele foi aplicado:
 
 1. Factory Method (Criação)
