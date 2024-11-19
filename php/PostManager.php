@@ -1,6 +1,6 @@
 <?php
-include_once ('../factory/PostFactory.php');
-include_once ('../observer/PostLogger.php');
+require_once ('./PostFactory.php');
+require_once ('./PostLogger.php');
 
 class PostManager {
     private $logger;

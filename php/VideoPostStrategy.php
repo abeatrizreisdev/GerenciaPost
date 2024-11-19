@@ -1,5 +1,5 @@
 <?php
-include_once 'PostStrategy.php';
+include_once './PostStrategy.php';
 
 class VideoPostStrategy implements PostStrategy {
     public function display(Post $post) {

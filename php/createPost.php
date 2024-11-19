@@ -1,11 +1,12 @@
 <?php
-include_once('../classes/factory/PostFactory.php');
-include_once('../classes/factory/TextPost.php');
-include_once('../classes/factory/ImagePost.php');
-include_once('../classes/factory/VideoPost.php');
-include_once('../classes/database/conexao.php');
-include_once('../classes/facade/PostManager.php'); // Importa o PostManager
-include_once('../classes/observer/PostLogger.php'); // Importa o PostLogger
+
+require_once __DIR__ . "./PostFactory.php";
+require_once __DIR__ . "./TextPost.php";
+require_once __DIR__ . ('./ImagePost.php');
+require_once __DIR__ . ('./VideoPost.php');
+require_once __DIR__ . ('./conexao.php');
+require_once __DIR__ . ('./PostManager.php'); // Importa o PostManager
+require_once __DIR__ . ('./PostLogger.php'); // Importa o PostLogger
 
 // Instancia o logger e o gerenciador de posts
 $postLogger = new PostLogger();
