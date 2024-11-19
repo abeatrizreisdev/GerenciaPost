@@ -1,52 +1,48 @@
 <?php
-require_once ('../classes/factory/PostFactory.php');
-require_once ('../classes/observer/PostLogger.php');
+include_once ('../factory/PostFactory.php');
+include_once ('../observer/PostLogger.php');
 
 class PostManager {
     private $logger;
 
-    public function __construct() {
-        // Inicializando o logger para registrar os eventos
-        $this->logger = new PostLogger();
+    // Agora o construtor recebe um logger como parâmetro
+    public function __construct(PostLogger $logger) {
+        $this->logger = $logger;
     }
 
-    // Método para criar um post
     public function createPost($type, $content) {
-        // Criando o post com base no tipo
+        // Cria o post através da fábrica
         $post = PostFactory::createPost($type);
-        $post->setContent($content);
+        $post->setContent($content);  // Define o conteúdo do post
+        $post->saveToDatabase();  // Salva no banco de dados
         
-        // Salvando o post no banco de dados
-        $post->saveToDatabase();
-        
-        // Notificando o log (observer) com a criação do post
+        // Registra o log de criação
         $this->logger->update($post, 'created');
-
+    
+        // Verificando os logs no debug
+        var_dump($this->logger->getLogs());
+    
         return $post;
     }
 
-    // Método para atualizar o conteúdo de um post
     public function updatePost($post, $newContent) {
-        // Atualizando o conteúdo do post
         $post->setContent($newContent);
-
-        // Atualizando o post no banco de dados
         $post->updateInDatabase();
-
-        // Notificando o log (observer) com a atualização do post
-        $this->logger->update($post, 'updated');
+        $this->logger->update($post, 'updated');  // Registra o log de atualização
 
         return $post;
     }
 
-    // Método para excluir um post
     public function deletePost($post) {
-        // Excluindo o post do banco de dados
         $post->deleteFromDatabase();
-
-        // Notificando o log (observer) com a exclusão do post
-        $this->logger->update($post, 'deleted');
+        $this->logger->update($post, 'deleted');  // Registra o log de exclusão
 
         return $post;
+    }
+
+    // Retorna os logs registrados
+    public function getLogs() {
+        return $this->logger->getLogs();
     }
 }
+

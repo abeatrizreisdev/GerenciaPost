@@ -1,10 +1,10 @@
 <?php
-require_once ('../classes/factory/PostFactory.php');
-require_once ('../classes/factory/TextPost.php');
-require_once ('../classes/factory/ImagePost.php');
-require_once ('../classes/factory/VideoPost.php');
-require_once ('../classes/database/conexao.php');
-require_once ('../classes/facade/PostManager.php'); // Adicione o require do PostManager
+require_once ('./classes/factory/PostFactory.php');
+require_once ('./classes/factory/TextPost.php');
+require_once ('./classes/factory/ImagePost.php');
+require_once ('./classes/factory/VideoPost.php');
+require_once ('./classes/database/conexao.php');
+require_once ('./classes/facade/PostManager.php'); // Adicione o require do PostManager
 
 
 // Verificar se o formulário foi enviado

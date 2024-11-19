@@ -1,10 +1,9 @@
 <?php
-require_once 'Post.php';
-require_once ('../classes/strategy/PostStrategy.php');
-require_once ('../classes/strategy/TextPostStrategy.php');
-require_once ('../classes/strategy/ImagePostStrategy.php');
-require_once ('../classes/strategy/VideoPostStrategy.php');
-
+include_once 'Post.php';
+include_once  ('../strategy/PostStrategy.php');
+include_once  ('../strategy/TextPostStrategy.php');
+include_once  ('../strategy/ImagePostStrategy.php');
+include_once  ('../strategy/VideoPostStrategy.php');
 class PostFactory {
     public static function createPost($tipo, $conteudo = null, $imagemUrl = null, $videoUrl = null) {
         if ($tipo == 'text') {
