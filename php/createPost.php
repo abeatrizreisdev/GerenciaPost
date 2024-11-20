@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $videoUrl = null;
 
     // Upload de imagem
+// Upload de imagem
     if ($tipo === 'image' && $imagem) {
         $imagemUrl = $uploadDir . basename($imagem['name']);
         if (!move_uploaded_file($imagem['tmp_name'], $imagemUrl)) {
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     }
+
 
     // Upload de vídeo
     if ($tipo === 'video' && $video) {
@@ -50,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Se for imagem ou vídeo, passamos a URL do arquivo
         if ($tipo === 'image') {
-            $post = PostFactory::createPost($tipo, null, $imagemUrl, null);
+            $post = PostFactory::createPost($tipo, $conteudo, $imagemUrl, null);
         } elseif ($tipo === 'video') {
-            $post = PostFactory::createPost($tipo, null, null, $videoUrl);
-        } else {
+            $post = PostFactory::createPost($tipo, $conteudo, null, $videoUrl);
+        } elseif ($tipo === 'text') {
             $post = PostFactory::createPost($tipo, $conteudo, null, null);
         }
 
@@ -74,11 +76,13 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>"; // Ag
 <!-- Formulário HTML -->
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Post</title>
 </head>
+
 <body>
     <h1>Criar Post</h1>
     <form action="createPost.php" method="POST" enctype="multipart/form-data">
@@ -101,6 +105,7 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>"; // Ag
         <input type="submit" value="Criar Post">
     </form>
 
-    <a href="index.php">Voltar para Visualização</a>
+    <a href="home.php">Voltar para Visualização</a>
 </body>
+
 </html>

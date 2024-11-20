@@ -2,28 +2,38 @@
 require_once 'Post.php';
 
 class TextPost extends Post {
-    public $conteudo;
+    public $texto;
 
-    public function __construct($conteudo) {
-        $this->conteudo = $conteudo;
+    public function __construct($texto) {
+        $this->texto = $texto;
+    }
+    // Getter e Setter para 'texto'
+    public function getTexto() {
+        return $this->texto;
+    }
+
+    public function setTexto($conteudo) {
+        $this->texto = $conteudo;
     }
 
     public function saveToDatabase() {
-        $db = Database::getInstance();
-        
-        // Inserir o post na tabela 'posts'
-        $query = "INSERT INTO posts (tipo) VALUES ('text')";
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-
-        // Obter o ID do post recém-criado
-        $postId = $db->lastInsertId();
-
-        // Inserir o conteúdo do texto na tabela 'textPost'
-        $query = "INSERT INTO textPost (id_post, texto) VALUES (?, ?)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$postId, $this->conteudo]);
-
-        echo "Texto salvo no banco de dados: " . $this->conteudo . "\n";
+        try {
+            // Obter a instância do banco de dados
+            $db = Database::getInstance();
+            
+            // Inserir o post na tabela 'posts'
+            $query = "INSERT INTO posts (tipo, texto, data_criacao, data_atualizacao) VALUES ('text', ?, NOW(), NOW())";
+            $stmt = $db->prepare($query);
+            
+            // Executar a consulta com o URL da imagem
+            $stmt->execute([$this->texto]);
+    
+            echo "Post salvo no banco de dados: " . $this->texto . "\n";
+        } catch (Exception $e) {
+            // Tratar possíveis erros
+            echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
+        }
     }
+    
+    
 }
