@@ -1,5 +1,5 @@
 <?php
-include_once './PostStrategy.php';
+require_once __DIR__ . '/../strategy/PostStrategy.php';
 
 class TextPostStrategy implements PostStrategy {
     public function display(Post $post) {

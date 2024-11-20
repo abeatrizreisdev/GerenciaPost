@@ -1,8 +1,9 @@
 <?php
-require_once('./conexao.php');
-require_once('./PostFactory.php');
-require_once('./PostManager.php'); // Importa o PostManager
-require_once('./PostLogger.php'); // Importa o PostLogger
+require_once __DIR__ . '/config/conexao.php';
+require_once __DIR__ . "/factory/PostFactory.php";
+require_once __DIR__ . '/facade/PostManager.php'; // Importa o PostManager
+require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
+
 
 // Instancia o logger e o gerenciador de posts
 $postLogger = new PostLogger();

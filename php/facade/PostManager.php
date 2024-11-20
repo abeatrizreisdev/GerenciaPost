@@ -1,6 +1,7 @@
 <?php
-require_once ('./PostFactory.php');
-require_once ('./PostLogger.php');
+require_once __DIR__ . "/../factory/PostFactory.php";
+require_once __DIR__ . "/../observer/PostLogger.php";
+
 
 class PostManager {
     private $logger;
