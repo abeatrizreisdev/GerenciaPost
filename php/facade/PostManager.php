@@ -11,21 +11,18 @@ class PostManager {
         $this->logger = $logger;
     }
 
-    public function createPost($type, $content) {
-        // Cria o post através da fábrica
-        $post = PostFactory::createPost($type);
-        $post->setContent($content);  // Define o conteúdo do post
-        $post->saveToDatabase();  // Salva no banco de dados
-        
-        // Registra o log de criação
-        $this->logger->update($post, 'created');
+    public function createPost($type, $content, $imagemUrl = null, $videoUrl = null) {
+        // Cria o post através da fábrica com todos os parâmetros necessários
+        var_dump($imagemUrl, $videoUrl);
+        $post = PostFactory::createPost($type, $content, $imagemUrl, $videoUrl);
+        $post->saveToDatabase();
     
-        // Verificando os logs no debug
-        var_dump($this->logger->getLogs());
+        // Registra o evento no logger
+        $this->logger->update($post, 'created');
     
         return $post;
     }
-
+    
     public function updatePost($post, $newContent) {
         $post->setContent($newContent);
         $post->updateInDatabase();

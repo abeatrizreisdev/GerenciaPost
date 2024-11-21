@@ -48,15 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    var_dump($imagemUrl, $videoUrl);
+
     // Criação do post usando o PostFactory
     try {
         // Se for imagem ou vídeo, passamos a URL do arquivo
         if ($tipo === 'image') {
-            $post = PostFactory::createPost($tipo, $conteudo, $imagemUrl, null);
+            $post = $postManager->createPost($tipo, $conteudo, $imagemUrl, null);
         } elseif ($tipo === 'video') {
-            $post = PostFactory::createPost($tipo, $conteudo, null, $videoUrl);
+            $post = $postManager->createPost($tipo, $conteudo, null, $videoUrl);
         } elseif ($tipo === 'text') {
-            $post = PostFactory::createPost($tipo, $conteudo, null, null);
+            $post = $postManager->createPost($tipo, $conteudo, null, null);
         }
 
         // Salva o post no banco de dados
