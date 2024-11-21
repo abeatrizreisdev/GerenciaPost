@@ -46,5 +46,12 @@ class ImagePost extends Post {
         echo "Imagem salva no banco de dados: " . $this->imagem_url . "<br>";
     }
     
+    public function updatePost(){
+
+    }
+
+    public function deletePost(){
+        
+    }
     
 }

@@ -45,5 +45,12 @@ class VideoPost extends Post {
     
         echo "Vídeo salvo no banco de dados: " . $this->video_url . "\n";
     }
+    public function updatePost(){
+
+    }
+
+    public function deletePost(){
+        
+    }
     
 }

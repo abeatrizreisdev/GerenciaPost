@@ -20,5 +20,10 @@ abstract class Post {
     }
 
     abstract public function saveToDatabase();
+
+    abstract public function updatePost();
+
+    abstract public function deletePost();
+
 }
 ?>
