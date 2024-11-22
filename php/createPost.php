@@ -61,9 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = $postManager->createPost($tipo, $conteudo, null, null);
         }
 
-        // Salva o post no banco de dados
-        $post->saveToDatabase();
-
         echo "Post criado e salvo com sucesso!";
     } catch (Exception $e) {
         echo "Erro ao criar o post: " . $e->getMessage();
