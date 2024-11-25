@@ -17,4 +17,5 @@ class PostFactory {
             throw new Exception("Tipo de post inválido");
         }
     }
+    
 }

@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
 
 require_once __DIR__ . "/factory/PostFactory.php";
 require_once __DIR__ . "/factory/TextPost.php";
@@ -25,25 +26,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $uploadDir = '../uploads/';
-    $imagemUrl = null;
-    $videoUrl = null;
 
     // Upload de imagem
-    if ($tipo === 'image' && $imagem) {
+    if ($tipo === 'image' && isset($imagem['name']) && $imagem['name'] !== '') {
         $imagemUrl = $uploadDir . basename($imagem['name']);
         if (!move_uploaded_file($imagem['tmp_name'], $imagemUrl)) {
             echo "Falha no upload da imagem!";
             exit;
         }
+    } else {
+        $imagemUrl = null;
     }
-
-    // Upload de vídeo
-    if ($tipo === 'video' && $video) {
+    
+    if ($tipo === 'video' && isset($video['name']) && $video['name'] !== '') {
         $videoUrl = $uploadDir . basename($video['name']);
         if (!move_uploaded_file($video['tmp_name'], $videoUrl)) {
             echo "Falha no upload do vídeo!";
             exit;
         }
+    } else {
+        $videoUrl = null;
+    }
+    
+
+    if (empty($conteudo)) {
+        echo "Conteúdo do post não especificado!";
+        exit;
     }
 
     // Criação do post usando o PostManager
@@ -52,19 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = $postManager->createPost($tipo, $conteudo, $imagemUrl, null);  // Passa imagemUrl
         } elseif ($tipo === 'video' && $videoUrl) {
             $post = $postManager->createPost($tipo, $conteudo, null, $videoUrl);  // Passa videoUrl
-        } elseif ($tipo === 'text') {
+        } elseif ($tipo === 'text' && $conteudo) {
             $post = $postManager->createPost($tipo, $conteudo, null, null);  // Apenas conteúdo
         }
-
+    
         echo "Post criado e salvo com sucesso!";
     } catch (Exception $e) {
         echo "Erro ao criar o post: " . $e->getMessage();
     }
-} else {
-    echo "Método inválido. Por favor, envie o formulário corretamente.";
-}
+    
+} 
 
 echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
+
 
 ?>
 

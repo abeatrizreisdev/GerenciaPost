@@ -12,10 +12,6 @@ try {
     $db = Database::getInstance();
     $query = $db->query("SELECT * FROM posts");
     $posts = $query->fetchAll(PDO::FETCH_ASSOC);
-
-    echo "<pre><strong>Posts do Banco de Dados:</strong>\n";
-    print_r($posts);
-    echo "</pre>";
 } catch (Exception $e) {
     die("Erro ao buscar os posts: " . $e->getMessage());
 }

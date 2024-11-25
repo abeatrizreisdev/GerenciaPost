@@ -13,7 +13,6 @@ class PostManager {
 
     public function createPost($type, $content, $imagemUrl = null, $videoUrl = null) {
         // Cria o post através da fábrica com todos os parâmetros necessários
-        var_dump($imagemUrl, $videoUrl);
         $post = PostFactory::createPost($type, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
     
