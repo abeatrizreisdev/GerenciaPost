@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $videoUrl = null;
 
     // Upload de imagem
-// Upload de imagem
     if ($tipo === 'image' && $imagem) {
         $imagemUrl = $uploadDir . basename($imagem['name']);
         if (!move_uploaded_file($imagem['tmp_name'], $imagemUrl)) {
@@ -37,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     }
-
 
     // Upload de vídeo
     if ($tipo === 'video' && $video) {
@@ -48,17 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    var_dump($imagemUrl, $videoUrl);
-
-    // Criação do post usando o PostFactory
+    // Criação do post usando o PostManager
     try {
-        // Se for imagem ou vídeo, passamos a URL do arquivo
-        if ($tipo === 'image') {
-            $post = $postManager->createPost($tipo, $conteudo, $imagemUrl, null);
-        } elseif ($tipo === 'video') {
-            $post = $postManager->createPost($tipo, $conteudo, null, $videoUrl);
+        if ($tipo === 'image' && $imagemUrl) {
+            $post = $postManager->createPost($tipo, $conteudo, $imagemUrl, null);  // Passa imagemUrl
+        } elseif ($tipo === 'video' && $videoUrl) {
+            $post = $postManager->createPost($tipo, $conteudo, null, $videoUrl);  // Passa videoUrl
         } elseif ($tipo === 'text') {
-            $post = $postManager->createPost($tipo, $conteudo, null, null);
+            $post = $postManager->createPost($tipo, $conteudo, null, null);  // Apenas conteúdo
         }
 
         echo "Post criado e salvo com sucesso!";
@@ -69,7 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Método inválido. Por favor, envie o formulário corretamente.";
 }
 
-echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>"; // Agora $postManager está instanciado
+echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
+
 ?>
 
 <!-- Formulário HTML -->
@@ -93,7 +89,7 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>"; // Ag
         </select><br>
 
         <label for="conteudo">Conteúdo (apenas texto):</label>
-        <textarea name="conteudo" id="conteudo"></textarea><br>
+        <textarea name="conteudo" id="conteudo" required></textarea><br>
 
         <label for="imagem">Imagem:</label>
         <input type="file" name="imagem" id="imagem"><br>

@@ -1,11 +1,14 @@
 <?php
 require_once 'Post.php';
 
-class TextPost extends Post {
+class TextPost extends Post {    
     public $texto;
 
-    public function __construct($texto) {
+    // Agora o construtor aceita o ID como parâmetro
+    public function __construct($texto, $id = null) {
+        parent::__construct(null, $id);  // Chama o construtor da classe pai e passa o ID
         $this->texto = $texto;
+        
     }
     // Getter e Setter para 'texto'
     public function getTexto() {

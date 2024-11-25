@@ -5,7 +5,8 @@ class VideoPost extends Post {
     public $video_url;
     public $texto;
 
-    public function __construct($video_url, $texto = null) {
+    public function __construct($video_url, $texto = null, $id = null) {
+        parent::__construct(null, $id);
         $this->video_url = $video_url;
         $this->texto = $texto;
     }

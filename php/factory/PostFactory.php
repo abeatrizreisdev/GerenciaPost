@@ -8,11 +8,11 @@ require_once __DIR__ .  ('/../strategy/VideoPostStrategy.php');
 class PostFactory {
     public static function createPost($tipo, $conteudo = null, $imagemUrl = null, $videoUrl = null) {
         if ($tipo == 'text') {
-            return new TextPost($conteudo);  // Sem título
+            return new TextPost($conteudo, null);  // Sem imagem e sem vídeo
         } elseif ($tipo == 'image') {
-            return new ImagePost($imagemUrl, $conteudo);  // Sem título
+            return new ImagePost($imagemUrl, $conteudo, null);  // Passa imagemUrl
         } elseif ($tipo == 'video') {
-            return new VideoPost($videoUrl, $conteudo);  // Sem título
+            return new VideoPost($videoUrl, $conteudo, null);  // Passa videoUrl
         } else {
             throw new Exception("Tipo de post inválido");
         }

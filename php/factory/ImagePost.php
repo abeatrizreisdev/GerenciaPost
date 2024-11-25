@@ -5,7 +5,8 @@ class ImagePost extends Post {
     public $imagem_url;
     public $texto;
 
-    public function __construct($imagem_url, $texto = null) {
+    public function __construct($imagem_url, $texto = null, $id = null) {
+        parent::__construct(null, $id); // Passa o ID para a classe base
         $this->imagem_url = $imagem_url;
         $this->texto = $texto;
     }
