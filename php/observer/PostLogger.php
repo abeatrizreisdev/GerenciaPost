@@ -11,7 +11,10 @@ class PostLogger implements PostObserver {
         // Debugging: Verificando o que está sendo adicionado ao log
         echo "Log registrado: $message<br>"; // Adiciona um log diretamente no navegador
     }
-
+    public function log($message) {
+        // Aqui você pode escolher como deseja fazer o log (arquivo, banco de dados, etc.)
+        error_log($message); // Exemplo de log no arquivo de erro padrão
+    }
     private function generateLogMessage(Post $post, $event) {
         $timestamp = date('Y-m-d H:i:s');
         $postType = get_class($post);

@@ -3,56 +3,79 @@ require_once __DIR__ . "/../factory/PostFactory.php";
 require_once __DIR__ . "/../observer/PostLogger.php";
 
 
-class PostManager {
+class PostManager
+{
     private $logger;
 
     // Agora o construtor recebe um logger como parâmetro
-    public function __construct(PostLogger $logger) {
+    public function __construct(PostLogger $logger)
+    {
         $this->logger = $logger;
     }
 
-    public function createPost($type, $content, $imagemUrl = null, $videoUrl = null) {
+    public function createPost($type, $content, $imagemUrl = null, $videoUrl = null)
+    {
         // Cria o post através da fábrica com todos os parâmetros necessários
         $post = PostFactory::createPost($type, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
-    
+
         // Registra o evento no logger
         $this->logger->update($post, 'created');
-    
+
         return $post;
     }
-    public function readPost($searchTerm = '', $searchType = '') {
-        // Conectar ao banco de dados
-        $db = Database::getInstance();
-
-        // Construção da query
-        $sql = "SELECT * FROM posts WHERE 1=1"; // 1=1 é uma técnica para facilitar a concatenação de condições
-
-        // Filtrando por termo de pesquisa, se presente
-        if (!empty($searchTerm)) {
-            $searchTerm = "%" . $db->quote($searchTerm) . "%";  // Evitar SQL injection
-            $sql .= " AND conteudo LIKE $searchTerm";
+    public function buscarTodosPosts() {
+        try {
+            $db = Database::getInstance();
+            $sql = "SELECT * FROM posts";
+            $stmt = $db->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Usa o método log() para registrar a exceção
+            $this->logger->log("Erro ao buscar todos os posts: " . $e->getMessage());
+            return null;
         }
-
-        // Filtrando por tipo de post, se presente
-        if (!empty($searchType)) {
-            $sql .= " AND tipo = $searchType";
-        }
-
-        // Executando a consulta
-        $stmt = $db->query($sql);
-
-        // Criando a lista de posts
-        $posts = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            // Usando a PostFactory para criar o post com base no tipo
-            $posts[] = PostFactory::createPost($row);
-        }
-
-        return $posts;
     }
 
-    public function updatePost($post, $newContent) {
+    public function buscarPostsPorFiltro($tipo, $conteudo = '') {
+        try {
+            $db = Database::getInstance();
+            $sql = "";
+            $params = [];
+
+            // Ajuste da consulta dependendo do tipo de filtro
+            switch ($tipo) {
+                case 'all':
+                    $sql = "SELECT * FROM posts WHERE texto LIKE :conteudo OR imagem_url LIKE :conteudo OR video_url LIKE :conteudo";
+                    break;
+                case 'image':
+                    $sql = "SELECT * FROM imagePost WHERE imagem_url LIKE :conteudo";
+                    break;
+                case 'text':
+                    $sql = "SELECT * FROM textPost WHERE texto LIKE :conteudo";
+                    break;
+                case 'video':
+                    $sql = "SELECT * FROM videoPost WHERE video_url LIKE :conteudo";
+                    break;
+                default:
+                    throw new Exception("Tipo de filtro inválido: $tipo");
+            }
+
+            $params[':conteudo'] = '%' . $conteudo . '%';  // O parâmetro da busca
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);  // Execute a consulta com os parâmetros
+
+            // Retorna os posts encontrados
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Usa o método log() para registrar a exceção
+            $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
+            return null;
+        }
+    }
+    
+    public function updatePost($post, $newContent)
+    {
         $post->setContent($newContent);
         $post->updateInDatabase();
         $this->logger->update($post, 'updated');  // Registra o log de atualização
@@ -60,7 +83,8 @@ class PostManager {
         return $post;
     }
 
-    public function deletePost($post) {
+    public function deletePost($post)
+    {
         $post->deleteFromDatabase();
         $this->logger->update($post, 'deleted');  // Registra o log de exclusão
 
@@ -68,7 +92,8 @@ class PostManager {
     }
 
     // Retorna os logs registrados
-    public function getLogs() {
+    public function getLogs()
+    {
         return $this->logger->getLogs();
     }
 }
