@@ -46,7 +46,9 @@ class ImagePost extends Post {
         // Exibir a URL da imagem para confirmar a inserção
         echo "Imagem salva no banco de dados: " . $this->imagem_url . "<br>";
     }
-    
+    public function readPost(){
+        
+    }
     public function updatePost(){
 
     }

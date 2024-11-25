@@ -27,6 +27,9 @@ try {
 </head>
 
 <body>
+    <header>
+        <div>
+    </header>
     <h1>Visualizar Posts</h1>
     <a href="createPost.php">Criar Novo Post</a>
     <hr>

@@ -2,19 +2,19 @@
 abstract class Post {
     protected $id;
     protected $strategy;
-    protected $content;
+    protected $conteudo;
 
     public function __construct(PostStrategy $strategy = null, $id=null) {
         $this->strategy = $strategy;
         $this->id= $id;
     }
 
-    public function setContent($content) {
-        $this->content = $content;
+    public function setConteudo($conteudo) {
+        $this->conteudo = $conteudo;
     }
 
-    public function getContent() {
-        return $this->content;
+    public function getConteudo() {
+        return $this->conteudo;
     }
     public function setId($id) {
         $this->id = $id;
@@ -29,6 +29,8 @@ abstract class Post {
     abstract public function saveToDatabase();
 
     abstract public function updatePost();
+    
+    abstract public function readPost();
 
     abstract public function deletePost();
 

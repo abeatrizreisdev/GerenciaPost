@@ -21,7 +21,37 @@ class PostManager {
     
         return $post;
     }
-    
+    public function readPost($searchTerm = '', $searchType = '') {
+        // Conectar ao banco de dados
+        $db = Database::getInstance();
+
+        // Construção da query
+        $sql = "SELECT * FROM posts WHERE 1=1"; // 1=1 é uma técnica para facilitar a concatenação de condições
+
+        // Filtrando por termo de pesquisa, se presente
+        if (!empty($searchTerm)) {
+            $searchTerm = "%" . $db->quote($searchTerm) . "%";  // Evitar SQL injection
+            $sql .= " AND conteudo LIKE $searchTerm";
+        }
+
+        // Filtrando por tipo de post, se presente
+        if (!empty($searchType)) {
+            $sql .= " AND tipo = $searchType";
+        }
+
+        // Executando a consulta
+        $stmt = $db->query($sql);
+
+        // Criando a lista de posts
+        $posts = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // Usando a PostFactory para criar o post com base no tipo
+            $posts[] = PostFactory::createPost($row);
+        }
+
+        return $posts;
+    }
+
     public function updatePost($post, $newContent) {
         $post->setContent($newContent);
         $post->updateInDatabase();

@@ -37,6 +37,12 @@ class TextPost extends Post {
             echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
         }
     }
+
+    public function readPost(){
+        
+    }
+
+
     public function updatePost(){
 
     }

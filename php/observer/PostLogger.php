@@ -15,15 +15,15 @@ class PostLogger implements PostObserver {
     private function generateLogMessage(Post $post, $event) {
         $timestamp = date('Y-m-d H:i:s');
         $postType = get_class($post);
-        $content = $post->getContent();
+        $conteudo = $post->getConteudo();
 
         switch ($event) {
             case 'created':
-                return "[$timestamp] Novo post criado: $postType com conteúdo: $content";
+                return "[$timestamp] Novo post criado: $postType com conteúdo: $conteudo";
             case 'updated':
-                return "[$timestamp] Post atualizado: $postType com novo conteúdo: $content";
+                return "[$timestamp] Post atualizado: $postType com novo conteúdo: $conteudo";
             case 'deleted':
-                return "[$timestamp] Post excluído: $postType com conteúdo: $content";
+                return "[$timestamp] Post excluído: $postType com conteúdo: $conteudo";
             default:
                 return "[$timestamp] Evento desconhecido.";
         }
