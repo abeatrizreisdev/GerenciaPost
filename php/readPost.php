@@ -21,11 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         $html = '';
         foreach ($posts as $postData) {
             // Verifique se o tipo de post é válido antes de criar o post
+            var_dump($postData); 
             $post = PostFactory::createPost(
                 $postData['tipo'],
-                $postData['texto'] ?? $postData['imagemUrl'] ?? $postData['videoUrl'],
-                $postData['imagemUrl'] ?? null,
-                $postData['videoUrl'] ?? null
+                $postData['texto'],
+                $postData['imagem_url'] ?? null,
+                $postData['video_url'] ?? null
             );
             if (!$post->getStrategy()) {
                 echo "Estratégia não definida para o post ID: " . $post->getId();

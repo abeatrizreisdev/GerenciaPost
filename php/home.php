@@ -23,13 +23,13 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/geral.css">
     <title>Visualização de Posts</title>
 </head>
 
 <body>
-    <header>
-        <div>
-    </header>
+    <header id="headerMain"></header>
+
     <h1>Visualizar Posts</h1>
     <a href="createPost.php">Criar Novo Post</a>
     <hr>
@@ -60,6 +60,8 @@ try {
             <hr>
         <?php endforeach; ?>
     <?php endif; ?>
+
+    <script src="../js/header.js"></script>
 </body>
 
 </html>
