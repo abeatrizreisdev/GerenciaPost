@@ -2,20 +2,20 @@
 require_once 'Post.php';
 
 class ImagePost extends Post {
-    public $imagem_url;
+    public $imagemUrl;
     public $texto;
 
-    public function __construct($imagem_url, $texto = null, $id = null) {
-        parent::__construct(null, $id); // Passa o ID para a classe base
-        $this->imagem_url = $imagem_url;
+    public function __construct($imagemUrl, $texto = null, $id = null, PostStrategy $strategy) {
+        parent::__construct($strategy, $id); // Passa o ID para a classe base
+        $this->imagemUrl = $imagemUrl;
         $this->texto = $texto;
     }
     public function getImagemUrl() {
-        return $this->imagem_url;
+        return $this->imagemUrl;
     }
 
-    public function setImagemUrl($imagem_url) {
-        $this->imagem_url = $imagem_url;
+    public function setImagemUrl($imagemUrl) {
+        $this->imagemUrl = $imagemUrl;
     }
 
     // Getter e Setter para 'texto'
@@ -33,7 +33,7 @@ class ImagePost extends Post {
         // Inserir o post na tabela 'posts', incluindo imagem_url e texto
         $query = "INSERT INTO posts (tipo, texto, imagem_url,data_criacao, data_atualizacao) VALUES ('image', ?, ?,NOW(), NOW())";
         $stmt = $db->prepare($query);
-        $stmt->execute([$this->texto, $this->imagem_url]); // Inserir o texto e a imagem_url
+        $stmt->execute([$this->texto, $this->imagemUrl]); // Inserir o texto e a imagem_url
     
         // Obter o ID do post recém-criado
         $postId = $db->lastInsertId();
@@ -41,10 +41,10 @@ class ImagePost extends Post {
         // Inserir os dados na tabela 'imagePost' (a tabela de detalhes da imagem)
         $query = "INSERT INTO imagePost (id_post, imagem_url, texto) VALUES (?, ?, ?)";
         $stmt = $db->prepare($query);
-        $stmt->execute([$postId, $this->imagem_url, $this->texto]);
+        $stmt->execute([$postId, $this->imagemUrl, $this->texto]);
     
         // Exibir a URL da imagem para confirmar a inserção
-        echo "Imagem salva no banco de dados: " . $this->imagem_url . "<br>";
+        echo "Imagem salva no banco de dados: " . $this->imagemUrl . "<br>";
     }
     public function readPost(){
         

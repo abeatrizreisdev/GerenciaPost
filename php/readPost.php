@@ -1,65 +1,110 @@
 <?php
 require_once 'config/conexao.php';
+require_once 'factory/PostFactory.php';
 require_once 'facade/PostManager.php';
 require_once 'observer/PostLogger.php';
 
-$postManager = new PostManager(new PostLogger());
+// Instanciar gerenciador de posts
+$postLogger = new PostLogger();
+$postManager = new PostManager($postLogger);
 
-// Verifica se é uma requisição AJAX
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filtro'])) {
-    $filtro = $_GET['filtro'] ?? 'all';
-    $busca = $_GET['busca'] ?? '';
-    $posts = $postManager->buscarPostsPorFiltro($filtro, $busca);
+// Processar a requisição de busca via AJAX
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
+    $filter = $_POST['filter']; // Pode ser 'all', 'text', 'image', ou 'video'
+    $searchTerm = $_POST['search'] ?? '';
 
-    // Retorna os dados em formato JSON
-    header('Content-Type: application/json');
-    echo json_encode($posts);
+    // Busca os posts com base no filtro
+    $posts = $postManager->buscarPostsPorFiltro($filter, $searchTerm);
+
+    // Verifique se encontrou posts
+    if ($posts) {
+        $html = '';
+        foreach ($posts as $postData) {
+            // Verifique se o tipo de post é válido antes de criar o post
+            $post = PostFactory::createPost(
+                $postData['tipo'],
+                $postData['texto'] ?? $postData['imagemUrl'] ?? $postData['videoUrl'],
+                $postData['imagem_url'] ?? null,
+                $postData['video_url'] ?? null
+            );
+            if (!$post->getStrategy()) {
+                echo "Estratégia não definida para o post ID: " . $post->getId();
+                continue; // Pule este post
+            }
+            // Usar a estratégia para exibir o post
+            $html .= '<div class="post">';
+            $html .= $post->display();  // Exibe o conteúdo completo gerado pela estratégia
+            $html .= '</div>';
+        }
+
+        // Retorna o HTML gerado
+        echo $html;
+    } else {
+        echo '<p>Nenhum post encontrado.</p>';
+    }
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Posts</title>
+    <title>Posts Dinâmicos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
         .post {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
             padding: 10px;
-            border-radius: 5px;
-        }
-
-        .filtro-container {
-            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
-    <h1>Procurar Posts</h1>
+    <h1>Posts</h1>
 
-    <div class="filtro-container">
-        <form id="filtroForm">
-            <input type="text" id="busca" placeholder="Buscar conteúdo...">
-            <select id="filtro">
-                <option value="all">Todos</option>
-                <option value="image">Imagens</option>
-                <option value="text">Textos</option>
-                <option value="video">Vídeos</option>
-            </select>
-            <button type="submit">Filtrar</button>
-        </form>
+    <div>
+        <input type="text" id="search" placeholder="Buscar posts">
+        <select id="filter">
+            <option value="all">Todos</option>
+            <option value="text">Texto</option>
+            <option value="image">Imagem</option>
+            <option value="video">Vídeo</option>
+        </select>
+        <button id="searchButton">Buscar</button>
     </div>
 
-    <div id="postContainer">
-        <!-- Os posts serão mostrados aqui -->
+    <div id="postsContainer">
+        <!-- Os posts serão carregados aqui -->
     </div>
-    <script src="/../js/buscarPost.js"></script>
+
+    <script>
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const searchTerm = document.getElementById('search').value;
+            const filter = document.getElementById('filter').value;
+
+            // Enviar a requisição AJAX para o PHP
+            fetch('readPost.php', {  // Altere para o arquivo correto, como 'readPost.php'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    filter: filter,
+                    search: searchTerm,
+                }),
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Atualizar o conteúdo do contêiner com os posts
+                    document.getElementById('postsContainer').innerHTML = html;
+                })
+                .catch(error => console.error('Erro ao buscar os posts:', error));
+        });
+
+    </script>
 </body>
+
+</html>

@@ -22,7 +22,16 @@ abstract class Post {
     public function getId() {
         return $this->id;
     }
+    public function setStrategy($strategy) {
+        $this->strategy = $strategy;
+    }
+    public function getStrategy() {
+        return $this->strategy;
+    }
     public function display() {
+        if (!$this->strategy) {
+            throw new Exception("Estratégia não definida para este post.");
+        }
         return $this->strategy->display($this);
     }
 
