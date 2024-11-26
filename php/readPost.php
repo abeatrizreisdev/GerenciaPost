@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
             $post = PostFactory::createPost(
                 $postData['tipo'],
                 $postData['texto'] ?? $postData['imagemUrl'] ?? $postData['videoUrl'],
-                $postData['imagem_url'] ?? null,
-                $postData['video_url'] ?? null
+                $postData['imagemUrl'] ?? null,
+                $postData['videoUrl'] ?? null
             );
             if (!$post->getStrategy()) {
                 echo "Estratégia não definida para o post ID: " . $post->getId();
