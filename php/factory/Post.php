@@ -3,18 +3,34 @@ abstract class Post {
     protected $id;
     protected $strategy;
     protected $conteudo;
+    protected $dataCriacao;
+    protected $dataAtualizacao;
 
     public function __construct(PostStrategy $strategy = null, $id=null) {
         $this->strategy = $strategy;
         $this->id= $id;
     }
-
     public function setConteudo($conteudo) {
         $this->conteudo = $conteudo;
     }
 
     public function getConteudo() {
         return $this->conteudo;
+    }
+    public function setDataCriacao($dataCriacao) {
+        $this->dataCriacao = $dataCriacao;
+    }
+
+    public function getDataCriacao() {
+        return $this->dataCriacao;  // Usando a mesma propriedade que foi definida
+    }
+
+    public function setDataAtualizacao($dataAtualizacao) {
+        $this->dataAtualizacao = $dataAtualizacao;
+    }
+
+    public function getDataAtualizacao() {
+        return $this->dataAtualizacao;  // Usando a mesma propriedade que foi definida
     }
     public function setId($id) {
         $this->id = $id;

@@ -2,22 +2,34 @@
 require_once 'Post.php';
 
 class ImagePost extends Post {
+    public $id;
     public $imagemUrl;
     public $texto;
+    protected $dataCriacao;
+    protected $dataAtualizacao;
 
-    public function __construct($imagemUrl, $texto = null, $id = null, PostStrategy $strategy) {
-        parent::__construct($strategy, $id); // Passa o ID para a classe base
+    public function __construct($id, $imagemUrl, $texto = null, $dataCriacao, $dataAtualizacao, PostStrategy $strategy) {
+        parent::__construct($strategy);
+        $this->id = $id;
         $this->imagemUrl = $imagemUrl;
         $this->texto = $texto;
+        $this->dataCriacao = $dataCriacao;
+        $this->dataAtualizacao = $dataAtualizacao;
     }
+    public function getId() {
+        return $this->id;
+    }
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
     public function getImagemUrl() {
         return $this->imagemUrl;
     }
-
     public function setImagemUrl($imagemUrl) {
         $this->imagemUrl = $imagemUrl;
     }
-
+    
     // Getter e Setter para 'texto'
     public function getTexto() {
         return $this->texto;
@@ -26,6 +38,25 @@ class ImagePost extends Post {
     public function setTexto($conteudo) {
         $this->texto = $conteudo;
     }
+
+    public function getDataCriacao()
+    {
+        return $this->dataCriacao;
+    }
+    public function setDataCriacao($dataCriacao)
+    {
+        $this->dataCriacao = $dataCriacao;
+
+    }public function getDataAtualizacao()
+    {
+        return $this->dataAtualizacao;
+    }
+    public function setDataAtualizacao($dataAtualizacao)
+    {
+        $this->texto = $dataAtualizacao;
+    }
+
+
     public function saveToDatabase() {
         // Obter a conexão diretamente do Singleton
         $db = Database::getInstance();

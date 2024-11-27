@@ -45,7 +45,7 @@ try {
                     <p>Texto: <?php echo htmlspecialchars($post['texto']); ?></p>
 
                 <?php elseif ($post['tipo'] === 'image' && !empty($post['imagem_url'])): ?>
-                    <img src="../uploads/<?php echo htmlspecialchars($post['imagem_url']); ?>" alt="Imagem do Post"
+                    <img src="../uploads/<?php echo htmlspecialchars($post['imagemUrl']); ?>" alt="Imagem do Post"
                         style="max-width: 100%;">
 
                 <?php elseif ($post['tipo'] === 'video' && !empty($post['video_url'])): ?>
