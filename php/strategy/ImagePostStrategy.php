@@ -7,6 +7,8 @@ class ImagePostStrategy implements PostStrategy
     {
         $dataCriacao = htmlspecialchars($post->getDataCriacao());  // Conteúdo genérico (texto)
         $dataAtualizacao = htmlspecialchars($post->getDataAtualizacao());  // Conteúdo genérico (texto)
+        $dataAtualizacao = htmlspecialchars($post->getDataAtualizacao());  // Conteúdo genérico (texto)
+
 
         // Verifica se o post é uma instância de ImagePost e acessa o URL da imagem
         if ($post instanceof ImagePost) {
