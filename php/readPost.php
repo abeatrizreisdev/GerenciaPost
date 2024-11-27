@@ -26,9 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
                 $postData['tipo'],
                 $postData['texto'],
                 $postData['imagem_url'] ?? null,
-                $postData['video_url'] ?? null,
-                $postData['data_criacao'] ?? null,  // Passando a data de criação
-                $postData['data_atualizacao'] ?? null  // Passando a data de atualização
+                $postData['video_url'] ?? null
             );
             if (!$post->getStrategy()) {
                 echo "Estratégia não definida para o post ID: " . $post->getId();

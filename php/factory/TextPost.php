@@ -3,49 +3,23 @@ require_once 'Post.php';
 
 class TextPost extends Post
 {
-    public $id;
     public $texto;
-    protected $dataCriacao;
-    protected $dataAtualizacao;
+
     // Agora o construtor aceita o ID como parâmetro
-    public function __construct($texto, $id, PostStrategy $strategy, $dataCriacao, $dataAtualizacao ){
-        parent::__construct($strategy);  // Passa a estratégia para a classe pai
-        $this->id = $id;
+    public function __construct($texto, $id = null, PostStrategy $strategy){
+        parent::__construct($strategy, $id);  // Passa a estratégia para a classe pai
         $this->texto = $texto;
-        $this->dataCriacao = $dataCriacao;
-        $this->dataAtualizacao = $dataAtualizacao;
+
     }
     // Getter e Setter para 'texto'
-    public function getId()
-    {
-        return $this->id;
-    }
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
     public function getTexto()
     {
         return $this->texto;
     }
+
     public function setTexto($conteudo)
     {
         $this->texto = $conteudo;
-    }
-    public function getDataCriacao()
-    {
-        return $this->dataCriacao;
-    }
-    public function setDataCriacao($dataCriacao)
-    {
-        $this->dataCriacao = $dataCriacao;
-    }public function getDataAtualizacao()
-    {
-        return $this->dataAtualizacao;
-    }
-    public function setDataAtualizacao($dataAtualizacao)
-    {
-        $this->texto = $dataAtualizacao;
     }
 
     public function saveToDatabase()
