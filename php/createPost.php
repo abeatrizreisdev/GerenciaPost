@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $imagemUrl = null;
     }
-    
+
     if ($tipo === 'video' && isset($video['name']) && $video['name'] !== '') {
         $videoUrl = $uploadDir . basename($video['name']);
         if (!move_uploaded_file($video['tmp_name'], $videoUrl)) {
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $videoUrl = null;
     }
-    
+
 
     if (empty($conteudo)) {
         echo "Conteúdo do post não especificado!";
@@ -63,13 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($tipo === 'text' && $conteudo) {
             $post = $postManager->createPost($tipo, $conteudo, null, null);  // Apenas conteúdo
         }
-    
+
         echo "Post criado e salvo com sucesso!";
     } catch (Exception $e) {
         echo "Erro ao criar o post: " . $e->getMessage();
     }
-    
-} 
+
+}
 
 echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
@@ -83,10 +83,13 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/geral.css">
     <title>Criar Post</title>
 </head>
 
 <body>
+    <header id="headerMain"></header>
+
     <h1>Criar Post</h1>
     <form action="createPost.php" method="POST" enctype="multipart/form-data">
         <label for="tipo">Tipo de Post:</label>
@@ -109,6 +112,9 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
     </form>
 
     <a href="home.php">Voltar para Visualização</a>
+
+    <script src="../js/header.js"></script>
+
 </body>
 
 </html>

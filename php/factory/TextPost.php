@@ -7,8 +7,9 @@ class TextPost extends Post
     public $texto;
 
     // Agora o construtor aceita o ID como parâmetro
-    public function __construct($texto, $id, PostStrategy $strategy){
-        parent::__construct($strategy); 
+    public function __construct($texto, $id, PostStrategy $strategy)
+    {
+        parent::__construct($strategy);
         $this->texto = $texto;
         $this->id = $id;
 
@@ -44,6 +45,14 @@ class TextPost extends Post
 
             // Executar a consulta com o URL da imagem
             $stmt->execute([$this->texto]);
+
+            $postId = $db->lastInsertId();
+
+            $query = "INSERT INTO videoPost (id_post, texto) VALUES (?, ?)";
+            $stmt = $db->prepare($query);
+            // Passando os valores para o execute
+            $stmt->execute([$this->texto]);
+        
 
             echo "Post salvo no banco de dados: " . $this->texto . "\n";
         } catch (Exception $e) {
