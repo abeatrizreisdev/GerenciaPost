@@ -9,8 +9,6 @@ CREATE TABLE posts (
 	texto TEXT NULL,
     imagem_url VARCHAR(255),
     video_url VARCHAR(255),
-    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    data_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE textPost (

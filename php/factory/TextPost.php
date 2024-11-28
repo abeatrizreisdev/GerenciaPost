@@ -29,7 +29,7 @@ class TextPost extends Post
             $db = Database::getInstance();
 
             // Inserir o post na tabela 'posts'
-            $query = "INSERT INTO posts (tipo, texto, data_criacao, data_atualizacao) VALUES ('text', ?, NOW(), NOW())";
+            $query = "INSERT INTO posts (tipo, texto) VALUES ('text', ?)";
             $stmt = $db->prepare($query);
 
             // Executar a consulta com o URL da imagem

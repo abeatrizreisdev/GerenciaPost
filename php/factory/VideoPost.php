@@ -30,7 +30,7 @@ class VideoPost extends Post {
         $db = Database::getInstance();
         
         // Inserir o post na tabela 'posts'
-        $query = "INSERT INTO posts (tipo, video_url, texto, data_criacao, data_atualizacao) VALUES ('video', ?, ?, NOW(), NOW())";
+        $query = "INSERT INTO posts (tipo, video_url, texto) VALUES ('video', ?, ?)";
         $stmt = $db->prepare($query);
         // Passando os valores para o execute
         $stmt->execute([$this->videoUrl, $this->texto]);

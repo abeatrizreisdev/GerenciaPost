@@ -31,7 +31,7 @@ class ImagePost extends Post {
         $db = Database::getInstance();
     
         // Inserir o post na tabela 'posts', incluindo imagem_url e texto
-        $query = "INSERT INTO posts (tipo, texto, imagem_url,data_criacao, data_atualizacao) VALUES ('image', ?, ?,NOW(), NOW())";
+        $query = "INSERT INTO posts (tipo, texto, imagem_url) VALUES ('image', ?, ?)";
         $stmt = $db->prepare($query);
         $stmt->execute([$this->texto, $this->imagemUrl]); // Inserir o texto e a imagem_url
     

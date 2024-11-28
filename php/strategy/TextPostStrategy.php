@@ -5,11 +5,14 @@ require_once __DIR__ . '/../factory/Post.php';
 
 
 class TextPostStrategy implements PostStrategy {
-    public function display(Post $post) {
-        $html = "<h3>Texto</h3>";
-        $html .= "<p>ID do Post: " . htmlspecialchars($post->getId()) . "</p>";
-        $html .= "<p>Conteúdo: " . htmlspecialchars($post->getConteudo()) . "</p>";  // Exibe o conteúdo (texto)
-        
+    public function display(Post $post)
+    {
+        // Verifica se o post é uma instância de ImagePost e acessa o URL da imagem
+        if ($post instanceof TextPost) {
+            $conteudo = htmlspecialchars($post->getTexto());  // Conteúdo genérico (texto)
+            $html = "<h3>Texto</h3>";
+            $html .= "<p>Conteúdo: " . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
+        }
         return $html;
     }
 }
