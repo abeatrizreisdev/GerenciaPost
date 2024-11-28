@@ -8,7 +8,7 @@ CREATE TABLE posts (
     tipo ENUM('text', 'image', 'video') NOT NULL,
 	texto TEXT NULL,
     imagem_url VARCHAR(255),
-    video_url VARCHAR(255),
+    video_url VARCHAR(255)
 );
 
 CREATE TABLE textPost (

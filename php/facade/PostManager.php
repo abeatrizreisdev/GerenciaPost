@@ -46,7 +46,7 @@ class PostManager
             // Ajuste da consulta dependendo do tipo de filtro
             switch ($tipo) {
                 case 'all':
-                    $sql = "SELECT * FROM posts WHERE texto LIKE :conteudo OR imagem_url LIKE :conteudo OR video_url LIKE :conteudo";
+                    $sql = "SELECT * FROM posts WHERE texto LIKE :conteudo";
                     break;
                 case 'image':
                     $sql = "SELECT * FROM imagePost WHERE imagem_url LIKE :conteudo";
@@ -63,9 +63,9 @@ class PostManager
 
             $params[':conteudo'] = '%' . $conteudo . '%';  // O parâmetro da busca
             $stmt = $db->prepare($sql);
-            $stmt->execute($params);  // Execute a consulta com os parâmetros
+            $stmt->execute($params);  // consulta com os parâmetros
 
-            // Retorna os posts encontrados
+            //posts encontrados
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             // Usa o método log() para registrar a exceção

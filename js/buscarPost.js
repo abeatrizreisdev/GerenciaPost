@@ -1,32 +1,22 @@
-document.getElementById('filtroForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+document.getElementById('searchButton').addEventListener('click', function () {
+    const searchTerm = document.getElementById('search').value;
+    const filter = document.getElementById('filter').value;
 
-    const busca = document.getElementById('busca').value;
-    const filtro = document.getElementById('filtro').value;
-
-    fetch(`buscarPosts.php?filtro=${filtro}&busca=${encodeURIComponent(busca)}`)
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('postContainer');
-            container.innerHTML = '';
-
-            if (data.error) {
-                container.innerHTML = `<p>${data.error}</p>`;
-                return;
-            }
-
-            if (data.length === 0) {
-                container.innerHTML = '<p>Nenhum post encontrado.</p>';
-                return;
-            }
-
-            data.forEach(html => {
-                const postDiv = document.createElement('div');
-                postDiv.innerHTML = html;
-                container.appendChild(postDiv);
-            });
+    // Enviar a requisição AJAX para o PHP
+    fetch('readPost.php', {  // Altere para o arquivo correto, como 'readPost.php'
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            filter: filter,
+            search: searchTerm,
+        }),
+    })
+        .then(response => response.text())
+        .then(html => {
+            // Atualizar o conteúdo do contêiner com os posts
+            document.getElementById('postsContainer').innerHTML = html;
         })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
+        .catch(error => console.error('Erro ao buscar os posts:', error));
 });

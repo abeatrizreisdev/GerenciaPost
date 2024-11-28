@@ -3,12 +3,14 @@ require_once 'Post.php';
 
 class TextPost extends Post
 {
+    public $id;
     public $texto;
 
     // Agora o construtor aceita o ID como parâmetro
-    public function __construct($texto, $id = null, PostStrategy $strategy){
-        parent::__construct($strategy, $id);  // Passa a estratégia para a classe pai
+    public function __construct($texto, $id, PostStrategy $strategy){
+        parent::__construct($strategy); 
         $this->texto = $texto;
+        $this->id = $id;
 
     }
     // Getter e Setter para 'texto'
@@ -16,12 +18,20 @@ class TextPost extends Post
     {
         return $this->texto;
     }
-
     public function setTexto($conteudo)
     {
         $this->texto = $conteudo;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     public function saveToDatabase()
     {
         try {
@@ -46,7 +56,7 @@ class TextPost extends Post
     {
         $db = Database::getInstance();
         $stmt = $db->prepare("UPDATE textPost SET texto = :texto WHERE id = :id");
-        $stmt->bindValue(':texto', $this->getConteudo());
+        $stmt->bindValue(':texto', $this->getTexto());
         $stmt->bindValue(':id', $this->getId());
         $stmt->execute();
     }

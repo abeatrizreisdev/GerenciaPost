@@ -2,13 +2,16 @@
 require_once 'Post.php';
 
 class VideoPost extends Post {
+
+    public $id;
     public $videoUrl;
     public $texto;
 
-    public function __construct($videoUrl, $texto = null, $id = null, PostStrategy $strategy) {
-        parent::__construct($strategy, $id);
+    public function __construct($videoUrl, $texto, $id, PostStrategy $strategy) {
+        parent::__construct($strategy);
         $this->videoUrl = $videoUrl;
         $this->texto = $texto;
+        $this->id = $id;
     }
     public function getVideoUrl() {
         return $this->videoUrl;
@@ -26,6 +29,15 @@ class VideoPost extends Post {
     public function setTexto($conteudo) {
         $this->texto = $conteudo;
     }
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+
     public function saveToDatabase() {
         $db = Database::getInstance();
         

@@ -1,27 +1,11 @@
 <?php
 abstract class Post {
-    protected $id;
     protected $strategy;
-    protected $conteudo;
 
-    public function __construct(PostStrategy $strategy = null, $id=null) {
+    public function __construct(PostStrategy $strategy) {
         $this->strategy = $strategy;
-        $this->id= $id;
     }
 
-    public function setConteudo($conteudo) {
-        $this->conteudo = $conteudo;
-    }
-
-    public function getConteudo() {
-        return $this->conteudo;
-    }
-    public function setId($id) {
-        $this->id = $id;
-    }
-    public function getId() {
-        return $this->id;
-    }
     public function setStrategy($strategy) {
         $this->strategy = $strategy;
     }

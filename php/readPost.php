@@ -21,9 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         $html = '';
         foreach ($posts as $postData) {
             // Verifique se o tipo de post é válido antes de criar o post
-            var_dump($postData); 
+            var_dump($postData);
             $post = PostFactory::createPost(
                 $postData['tipo'],
+                $postData['id'],
                 $postData['texto'],
                 $postData['imagem_url'] ?? null,
                 $postData['video_url'] ?? null
@@ -33,9 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
                 continue; // Pule este post
             }
             // Usar a estratégia para exibir o post
-            $html .= '<div class="post">';
-            $html .= $post->display();  // Exibe o conteúdo completo gerado pela estratégia
-            $html .= '</div>';
+            if ($postData['tipo'] === 'image') {
+                $html .= '<div class="postImagem">';
+                $html .= $post->display();  // post de imagem
+                $html .= '</div>';
+            } elseif ($postData['tipo'] === 'video') {
+                $html .= '<div class="postVideo">';
+                $html .= $post->display();  //post de vídeo
+                $html .= '</div>';
+            } else {
+                $html .= '<div class="postTexto">';
+                $html .= $post->display();  // post texto
+                $html .= '</div>';
+            }
         }
 
         // Retorna o HTML gerado
@@ -53,18 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts Dinâmicos</title>
-    <style>
-        .post {
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/geral.css">
+    <title>Procurar Posts</title>
 </head>
 
 <body>
-    <h1>Posts</h1>
+    <header id="headerMain"></header>
 
     <div>
         <input type="text" id="search" placeholder="Buscar posts">
@@ -81,31 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         <!-- Os posts serão carregados aqui -->
     </div>
 
-    <script>
-        document.getElementById('searchButton').addEventListener('click', function () {
-            const searchTerm = document.getElementById('search').value;
-            const filter = document.getElementById('filter').value;
+    <script src="../js/buscarPost.js"></script>
+    <script src="../js/header.js"></script>
 
-            // Enviar a requisição AJAX para o PHP
-            fetch('readPost.php', {  // Altere para o arquivo correto, como 'readPost.php'
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    filter: filter,
-                    search: searchTerm,
-                }),
-            })
-                .then(response => response.text())
-                .then(html => {
-                    // Atualizar o conteúdo do contêiner com os posts
-                    document.getElementById('postsContainer').innerHTML = html;
-                })
-                .catch(error => console.error('Erro ao buscar os posts:', error));
-        });
-
-    </script>
 </body>
 
 </html>
