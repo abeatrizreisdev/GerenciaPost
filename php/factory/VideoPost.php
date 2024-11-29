@@ -61,8 +61,35 @@ class VideoPost extends Post {
     public function readPost(){
         
     }
-    public function updatePost(){
+    public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
+    {
+        // Atualiza o texto do post
+        $this->texto = $novoTexto;
+        
+        // Se for fornecida uma nova URL de vídeo, atualiza a URL do vídeo
+        if ($novoVideoUrl) {
+            $this->videoUrl = $novoVideoUrl;
+        }
 
+        // Agora, faz o update no banco de dados
+        $this->salvarPost();
+    }
+
+    public function salvarPost()
+    {
+        $db = Database::getInstance();
+        $sql = "UPDATE videoPost SET texto = :texto, video_url = :video_url WHERE id = :id";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':texto', $this->getTexto());
+        $stmt->bindParam(':video_url', $this->getVideoUrl());
+        $stmt->bindParam(':id', $this->getId());
+
+        if ($stmt->execute()) {
+            echo "Post de vídeo atualizado com sucesso!";
+        } else {
+            throw new Exception("Erro ao atualizar o post de vídeo.");
+        }
     }
 
     public function deletePost(){

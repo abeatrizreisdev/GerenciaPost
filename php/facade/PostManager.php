@@ -18,24 +18,38 @@ class PostManager
         $id = uniqid();  
         $post = PostFactory::createPost($type, $id, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
-        
+
         $this->logger->update($post, 'created');
 
         return $post;
     }
 
-    public function buscarTodosPosts()
-    {
-        try {
-            $db = Database::getInstance();
-            $sql = "SELECT * FROM posts";
-            $stmt = $db->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            // Usa o método log() para registrar a exceção
-            $this->logger->log("Erro ao buscar todos os posts: " . $e->getMessage());
-            return null;
+    public function buscarPostPorId($postId) {
+        // Conectar ao banco de dados (supondo que você tenha uma classe de conexão)
+        $db = Database::getInstance();
+
+        // Consultar o banco de dados
+        $query = "SELECT * FROM posts WHERE id = :id";
+        $stmt = $db->getConnection()->prepare($query);
+        $stmt->bindParam(':id', $postId);
+        $stmt->execute();
+
+        // Recuperar o post do banco de dados
+        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar se o post foi encontrado
+        if ($postData) {
+            // Criar a instância do post com base no tipo
+            return PostFactory::createPost(
+                $postData['tipo'],
+                $postData['id'],
+                $postData['texto'],
+                $postData['imagem_url'] ?? null,
+                $postData['video_url'] ?? null
+            );
         }
+
+        return null;
     }
 
     public function buscarPostsPorFiltro($tipo, $conteudo = '')
@@ -76,14 +90,43 @@ class PostManager
         }
     }
 
-    public function updatePost($post, $newContent)
-    {
-        $post->setContent($newContent);
-        $post->updateInDatabase();
-        $this->logger->update($post, 'updated');  // Registra o log de atualização
-
-        return $post;
+    public function editarPost($postId, $novoTexto, $novaImagemUrl = null, $novoVideoUrl = null) {
+        // Buscar o post por ID
+        $post = $this->buscarPostPorId($postId);
+    
+        if ($post) {
+            // Verificar o tipo do post e delegar a edição para a classe específica
+            switch ($post->getTipo()) {
+                case 'image':
+                    // Se for post de imagem, cria uma instância de ImagePost e delega a edição
+                    $postImage = new ImagePost($post->getImagemUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postImage->editarPost($novoTexto, $novaImagemUrl);
+                    break;
+    
+                case 'video':
+                    // Se for post de vídeo, cria uma instância de VideoPost e delega a edição
+                    $postVideo = new VideoPost($post->getVideoUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postVideo->editarPost($novoTexto, $novoVideoUrl);
+                    break;
+    
+                case 'text':
+                    // Se for post de texto, cria uma instância de TextPost e delega a edição
+                    $postTexto = new TextPost($post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postTexto->editarPost($novoTexto);
+                    break;
+    
+                default:
+                    throw new Exception("Tipo de post inválido.");
+            }
+    
+            echo "Post atualizado com sucesso!";
+        } else {
+            throw new Exception("Post não encontrado para editar.");
+        }
     }
+    
+
+    
 
     public function deletePost($post)
     {

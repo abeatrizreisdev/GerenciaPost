@@ -68,11 +68,37 @@ class ImagePost extends Post
     {
 
     }
-    public function updatePost()
+    public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
     {
+        // Atualiza o texto
+        $this->setTexto($novoTexto);
 
+        // Atualiza a imagem, se fornecida
+        if ($novaImagemUrl) {
+            $this->setImagemUrl($novaImagemUrl);
+        }
+
+        // Agora, faz o update no banco de dados (método para salvar a atualização no banco)
+        $this->salvarPost();
     }
 
+    // Método para salvar a alteração no banco de dados
+    public function salvarPost()
+    {
+        $db = Database::getInstance();
+        $sql = "UPDATE imagePost SET texto = :texto, imagem_url = :imagem_url WHERE id = :id";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':texto', $this->getTexto());
+        $stmt->bindParam(':imagem_url', $this->getImagemUrl());
+        $stmt->bindParam(':id', $this->getId());
+
+        if ($stmt->execute()) {
+            echo "Post de imagem atualizado com sucesso!";
+        } else {
+            throw new Exception("Erro ao atualizar o post de imagem.");
+        }
+    }
     public function deletePost()
     {
 

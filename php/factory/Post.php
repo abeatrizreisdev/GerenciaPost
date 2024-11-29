@@ -1,6 +1,7 @@
 <?php
 abstract class Post {
     protected $strategy;
+    protected$tipo;
 
     public function __construct(PostStrategy $strategy) {
         $this->strategy = $strategy;
@@ -12,6 +13,14 @@ abstract class Post {
     public function getStrategy() {
         return $this->strategy;
     }
+
+    public function settipo($tipo) {
+        $this->tipo = $tipo;
+    }
+    public function getTipo() {
+        return $this->tipo;
+    }
+
     public function display() {
         if (!$this->strategy) {
             throw new Exception("Estratégia não definida para este post.");
@@ -21,7 +30,9 @@ abstract class Post {
 
     abstract public function saveToDatabase();
 
-    abstract public function updatePost();
+    abstract public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null);
+
+    abstract public function salvarPost();
     
     abstract public function readPost();
 

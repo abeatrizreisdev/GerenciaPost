@@ -33,20 +33,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
                 echo "Estratégia não definida para o post ID: " . $post->getId();
                 continue; // Pule este post
             }
-            // Usar a estratégia para exibir o post
+
+            $postId = htmlspecialchars($postData['id']);
+
+            // Crie a estrutura do post com botões
             if ($postData['tipo'] === 'image') {
                 $html .= '<div class="postImagem">';
-                $html .= $post->display();  // post de imagem
-                $html .= '</div>';
             } elseif ($postData['tipo'] === 'video') {
                 $html .= '<div class="postVideo">';
-                $html .= $post->display();  //post de vídeo
-                $html .= '</div>';
             } else {
                 $html .= '<div class="postTexto">';
-                $html .= $post->display();  // post texto
-                $html .= '</div>';
             }
+
+            // Conteúdo principal do post
+            $html .= $post->display();
+
+            // Botões de ação
+            $html .= '<div class="postButtons">';
+            $html .= '<button class="editPost" data-post-id="' . $postId . '">Editar</button>';
+            $html .= '<a href="javascript:void(0)" class="deletePost" data-post-id="' . $postId . '">Excluir</a>';
+            $html .= '</div>';
+
+            // Fechar a div do post
+            $html .= '</div>';
         }
 
         // Retorna o HTML gerado
@@ -89,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
 
     <script src="../js/buscarPost.js"></script>
     <script src="../js/header.js"></script>
+    <script src="../js/btnEditarPost.js"></script>
 
 </body>
 
