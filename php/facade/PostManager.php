@@ -31,7 +31,7 @@ class PostManager
 
         // Consultar o banco de dados
         $query = "SELECT * FROM posts WHERE id = :id";
-        $stmt = $db->getConnection()->prepare($query);
+        $stmt = $db->prepare($query);
         $stmt->bindParam(':id', $postId);
         $stmt->execute();
 
@@ -137,6 +137,8 @@ class PostManager
             }
 
             echo "Post atualizado com sucesso!";
+            $this->logger->update($post, 'updated');
+
         } else {
             throw new Exception("Post não encontrado para editar.");
         }
@@ -145,14 +147,38 @@ class PostManager
 
 
 
-    public function deletePost($post)
-    {
-        $post->deleteFromDatabase();
-        $this->logger->update($post, 'deleted');  // Registra o log de exclusão
+    public function deletePost($postId) {
+        // Buscar o post no banco de dados antes de excluir
+        $db = Database::getInstance();
+        $stmt = $db->prepare("SELECT * FROM posts WHERE id = :id");
+        $stmt->bindParam(':id', $postId);
+        $stmt->execute();
+        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $post;
+        if (!$postData) {
+            throw new Exception("Post não encontrado.");
+        }
+
+        // Instancia o post de acordo com os dados do banco
+        switch ($postData['tipo']) {
+            case 'image':
+                $post = new ImagePost($postData['id'], $postData['texto'], $postData['imagem_url'],$postData['strategy']);
+                break;
+            case 'video':
+                $post = new VideoPost($postData['id'], $postData['texto'], $postData['video_url'],$postData['strategy']);
+                break;
+            case 'text':
+                $post = new TextPost($postData['id'], $postData['texto'],$postData['strategy']);
+                break;
+            default:
+                throw new Exception("Tipo de post desconhecido.");
+        }
+
+        // Chama o método delete da classe de post
+        $post->deletePost(); // Isso irá excluir o post e registrar o log
+        $this->logger->update($post, 'deleted');
+
     }
-
     // Retorna os logs registrados
     public function getLogs()
     {

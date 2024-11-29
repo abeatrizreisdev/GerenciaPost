@@ -1,33 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Função que exibe o pop-up para confirmar a exclusão do post
-    function popUpDeletarPost(postId) {
-        const confirmDelete = confirm("Tem certeza que deseja excluir este post?");
-        if (confirmDelete) {
-            // Enviar requisição para excluir o post
-            fetch(`/deletar-post.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: postId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Post excluído com sucesso!');
-                    location.reload();  // Atualiza a página
-                } else {
-                    alert('Erro ao excluir o post.');
-                }
-            });
-        }
-    }
-
-    // Adicionar evento de clique no link de exclusão
+    // Manipula o botão de exclusão
     document.querySelectorAll('.deletePost').forEach(button => {
         button.addEventListener('click', function() {
-            const postId = button.getAttribute('data-post-id');
-            popUpDeletarPost(postId);  // Chama a função popUpDeletarPost passando o ID do post
+            const postId = this.getAttribute('data-post-id'); // Obtém o ID do post
+            if (confirm('Tem certeza que deseja excluir este post?')) {
+                // Envia a requisição para excluir o post
+                fetch('/../php/readPost.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'id=' + postId // Passa o ID do post para o PHP
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remover o post da lista sem recarregar a página
+                        const postElement = document.querySelector(`.post[data-post-id="${postId}"]`);
+                        if (postElement) {
+                            postElement.remove(); // Remove o post da DOM
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+            }
         });
     });
 });

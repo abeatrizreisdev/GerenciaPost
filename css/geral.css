@@ -275,6 +275,8 @@ TEXTOSTRATEGY */
     background-color: rgb(231, 231, 231);
     border: 0.6vh solid rgb(251, 187, 187);
     border-radius: 2vh;
+    margin: 2vh;
+
 }
 
 #tituloTexto {
@@ -303,6 +305,8 @@ VIDEOSTRATEGY */
     background-color: rgb(231, 231, 231);
     border: 0.6vh solid rgb(251, 187, 187);
     border-radius: 2vh;
+    margin: 2vh;
+
 }
 #tituloVideo {
     font-family: "Poppins";

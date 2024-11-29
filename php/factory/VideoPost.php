@@ -91,9 +91,15 @@ class VideoPost extends Post
     {
     }
 
-    public function deletePost()
-    {
+    public function deletePost() {
+        $db = Database::getInstance();
+        $stmt = $db->prepare("DELETE FROM posts WHERE id = :id");
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
 
+        $stmt = $db->prepare("DELETE FROM videoPost WHERE id = :id");
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
     }
 
 }

@@ -83,13 +83,17 @@ class TextPost extends Post
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function deletePost()
-    {
+    public function deletePost() {
         $db = Database::getInstance();
+        $stmt = $db->prepare("DELETE FROM posts WHERE id = :id");
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+
         $stmt = $db->prepare("DELETE FROM textPost WHERE id = :id");
-        $stmt->bindValue(':id', $this->getId());
+        $stmt->bindParam(':id', $this->id);
         $stmt->execute();
     }
+
 
 
 }

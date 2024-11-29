@@ -31,11 +31,11 @@ class PostLogger implements PostObserver {
         
         switch ($event) {
             case 'created':
-                return "[$timestamp] Novo post criado: $postType com conteúdo: $conteudo";
+                return "[$timestamp] Novo post criado: $postType ";
             case 'updated':
-                return "[$timestamp] Post atualizado: $postType com novo conteúdo: $conteudo";
+                return "[$timestamp] Post atualizado: $postType ";
             case 'deleted':
-                return "[$timestamp] Post excluído: $postType com conteúdo: $conteudo";
+                return "[$timestamp] Post excluído: $postType ";
             default:
                 return "[$timestamp] Evento desconhecido.";
         }

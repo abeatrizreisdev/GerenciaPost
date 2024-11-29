@@ -49,8 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
 
             // Botões de ação
             $html .= '<div class="postButtons">';
+            $html .= '<div class="postButtons">';
             $html .= '<button class="editPost" data-post-id="' . $postId . '">Editar</button>';
-            $html .= '<button class="deletePost" <a href="javascript:void(0)"  data-post-id="' . $postId . '">Excluir</a></button>';
+            $html .= '<a href="readPost.php?id=' . $postId . '" class="deletePost">Excluir</a>';
+            $html .= '</div>';
+
             $html .= '</div>';
 
             // Fechar a div do post
@@ -63,6 +66,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         echo '<p>Nenhum post encontrado.</p>';
     }
     exit;
+}
+
+
+
+// Verifica se o ID foi enviado via GET
+if (isset($_GET['id'])) {
+    $postId = $_GET['id'];  // ID do post a ser excluído
+
+    // Instanciar gerenciador de posts
+    $postLogger = new PostLogger();
+    $postManager = new PostManager($postLogger);
+
+    // Buscar o post pelo ID
+    $post = $postManager->buscarPostPorId($postId);
+
+    if ($post) {
+        // Deletar o post
+        $post->deletePost();  // Chama a função de delete específica do post
+
+        // Retorna sucesso
+    }
 }
 ?>
 
