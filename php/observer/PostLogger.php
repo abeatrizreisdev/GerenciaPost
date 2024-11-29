@@ -18,8 +18,17 @@ class PostLogger implements PostObserver {
     private function generateLogMessage(Post $post, $event) {
         $timestamp = date('Y-m-d H:i:s');
         $postType = get_class($post);
-        $conteudo = $post->getConteudo();
-
+        
+        if ($post instanceof TextPost) {
+            $conteudo = $post->getTexto();
+        } elseif ($post instanceof ImagePost) {
+            $conteudo = $post->getImagemUrl();
+        } elseif ($post instanceof VideoPost) {
+            $conteudo = $post->getVideoUrl();
+        } else {
+            $conteudo = 'Desconhecido';
+        }
+        
         switch ($event) {
             case 'created':
                 return "[$timestamp] Novo post criado: $postType com conteúdo: $conteudo";

@@ -5,10 +5,7 @@ USE gerenciapost;
 
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo ENUM('text', 'image', 'video') NOT NULL,
-	texto TEXT NULL,
-    imagem_url VARCHAR(255),
-    video_url VARCHAR(255)
+    tipo ENUM('text', 'image', 'video') NOT NULL
 );
 
 CREATE TABLE textPost (

@@ -17,59 +17,59 @@ $postManager = new PostManager($postLogger);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo = $_POST['tipo'] ?? null;
     $conteudo = $_POST['conteudo'] ?? null;
-    $imagem = $_FILES['imagem'] ?? null;
-    $video = $_FILES['video'] ?? null;
 
-    if (!$tipo) {
-        echo "Tipo de post não especificado!";
-        exit;
-    }
-
+    $imagemUrl = null;
+    $videoUrl = null;
     $uploadDir = '../uploads/';
 
     // Upload de imagem
-    if ($tipo === 'image' && isset($imagem['name']) && $imagem['name'] !== '') {
-        $imagemUrl = $uploadDir . basename($imagem['name']);
-        if (!move_uploaded_file($imagem['tmp_name'], $imagemUrl)) {
-            echo "Falha no upload da imagem!";
+    if ($tipo === 'image') {
+        if (!empty($_FILES['imagem']['name'])) {
+            $imagemUrl = $uploadDir . basename($_FILES['imagem']['name']);
+            if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $imagemUrl)) {
+                echo "Erro no upload da imagem.";
+                exit;
+            }
+        } else {
+            echo "Imagem não fornecida para o post do tipo 'image'.";
             exit;
         }
-    } else {
-        $imagemUrl = null;
     }
 
-    if ($tipo === 'video' && isset($video['name']) && $video['name'] !== '') {
-        $videoUrl = $uploadDir . basename($video['name']);
-        if (!move_uploaded_file($video['tmp_name'], $videoUrl)) {
-            echo "Falha no upload do vídeo!";
+    // Upload de vídeo
+    if ($tipo === 'video') {
+        if (!empty($_FILES['video']['name'])) {
+            $videoUrl = $uploadDir . basename($_FILES['video']['name']);
+            if (!move_uploaded_file($_FILES['video']['tmp_name'], $videoUrl)) {
+                echo "Erro no upload do vídeo.";
+                exit;
+            }
+        } else {
+            echo "Vídeo não fornecido para o post do tipo 'video'.";
             exit;
         }
-    } else {
-        $videoUrl = null;
     }
 
-
-    if (empty($conteudo)) {
-        echo "Conteúdo do post não especificado!";
-        exit;
-    }
-
-    // Criação do post usando o PostManager
     try {
-        if ($tipo === 'image' && $imagemUrl) {
-            $post = $postManager->createPost($tipo, $conteudo, $imagemUrl, null);  // Passa imagemUrl
-        } elseif ($tipo === 'video' && $videoUrl) {
-            $post = $postManager->createPost($tipo, $conteudo, null, $videoUrl);  // Passa videoUrl
-        } elseif ($tipo === 'text' && $conteudo) {
-            $post = $postManager->createPost($tipo, $conteudo, null, null);  // Apenas conteúdo
+        if ($tipo === 'image') {
+            $post = $postManager->createPost('image', $conteudo, $imagemUrl, null);
+        } elseif ($tipo === 'video') {
+            $post = $postManager->createPost('video', $conteudo, null, $videoUrl);
+        } elseif ($tipo === 'text') {
+            if (empty($conteudo)) {
+                throw new Exception("Conteúdo do post de texto não pode estar vazio.");
+            }
+            $post = $postManager->createPost('text', $conteudo, null, null);
+        } else {
+            throw new Exception("Tipo de post inválido.");
         }
 
-        echo "Post criado e salvo com sucesso!";
+        echo "Post criado com sucesso!";
     } catch (Exception $e) {
         echo "Erro ao criar o post: " . $e->getMessage();
     }
-
 }
+
 
 echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 

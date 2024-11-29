@@ -36,30 +36,29 @@ class TextPost extends Post
     public function saveToDatabase()
     {
         try {
-            // Obter a instância do banco de dados
+            // Debug: Verificar conteúdo antes de salvar
+            error_log("Tentando salvar o texto: " . $this->texto);
+
             $db = Database::getInstance();
 
-            // Inserir o post na tabela 'posts'
-            $query = "INSERT INTO posts (tipo, texto) VALUES ('text', ?)";
+            // Inserir na tabela 'posts'
+            $query = "INSERT INTO posts (tipo) VALUES ('text')";
             $stmt = $db->prepare($query);
-
-            // Executar a consulta com o URL da imagem
-            $stmt->execute([$this->texto]);
+            $stmt->execute();
 
             $postId = $db->lastInsertId();
 
-            $query = "INSERT INTO videoPost (id_post, texto) VALUES (?, ?)";
+            // Inserir na tabela 'textPost'
+            $query = "INSERT INTO textPost (id_post, texto) VALUES (?, ?)";
             $stmt = $db->prepare($query);
-            // Passando os valores para o execute
-            $stmt->execute([$this->texto]);
-        
+            $stmt->execute([$postId, $this->texto]);
 
             echo "Post salvo no banco de dados: " . $this->texto . "\n";
         } catch (Exception $e) {
-            // Tratar possíveis erros
             echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
         }
     }
+
 
     public function updatePost()
     {

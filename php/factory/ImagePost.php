@@ -49,9 +49,9 @@ class ImagePost extends Post
         $db = Database::getInstance();
 
         // Inserir o post na tabela 'posts', incluindo imagem_url e texto
-        $query = "INSERT INTO posts (tipo, texto, imagem_url) VALUES ('image', ?, ?)";
+        $query = "INSERT INTO posts (tipo) VALUES ('image')";
         $stmt = $db->prepare($query);
-        $stmt->execute([$this->texto, $this->imagemUrl]); // Inserir o texto e a imagem_url
+        $stmt->execute(); // Inserir o texto e a imagem_url
 
         // Obter o ID do post recém-criado
         $postId = $db->lastInsertId();

@@ -15,16 +15,17 @@ class PostManager
 
     public function createPost($type, $content, $imagemUrl = null, $videoUrl = null)
     {
-        // Cria o post através da fábrica com todos os parâmetros necessários
-        $post = PostFactory::createPost($type, $content, $imagemUrl, $videoUrl);
+        $id = uniqid();  
+        $post = PostFactory::createPost($type, $id, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
-
-        // Registra o evento no logger
+        
         $this->logger->update($post, 'created');
 
         return $post;
     }
-    public function buscarTodosPosts() {
+
+    public function buscarTodosPosts()
+    {
         try {
             $db = Database::getInstance();
             $sql = "SELECT * FROM posts";
@@ -37,7 +38,8 @@ class PostManager
         }
     }
 
-    public function buscarPostsPorFiltro($tipo, $conteudo = '') {
+    public function buscarPostsPorFiltro($tipo, $conteudo = '')
+    {
         try {
             $db = Database::getInstance();
             $sql = "";
@@ -73,7 +75,7 @@ class PostManager
             return null;
         }
     }
-    
+
     public function updatePost($post, $newContent)
     {
         $post->setContent($newContent);
