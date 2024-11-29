@@ -163,12 +163,39 @@ a:hover {
 
 #searchButton {
     height: 3.5vh;
-    width: 3.5vw;
+    width: 5vw;
     font-family: "Poppins";
+}
+#searchButton:hover{
+    cursor: pointer;
 }
 
 #postsContainer {
     text-align: center;
+}
+
+
+.editPost{
+    width: 8vw;
+    font-family: "Poppins";
+    background-color: rgb(117, 115, 115);
+    border: 0.2vh solid gray;
+    border-radius: 1vh;
+    margin: 1vh;
+}
+
+.deletePost{
+    width: 8vw;
+    font-family: "Poppins";
+    background-color: rgb(241, 102, 102);
+    border: 0.2vh solid gray;
+    border-radius: 1vh;
+    margin: 1vh;
+}
+
+
+.editPost,.deletePost:hover{
+    cursor: pointer;
 }
 
 

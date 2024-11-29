@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
             // Botões de ação
             $html .= '<div class="postButtons">';
             $html .= '<button class="editPost" data-post-id="' . $postId . '">Editar</button>';
-            $html .= '<a href="javascript:void(0)" class="deletePost" data-post-id="' . $postId . '">Excluir</a>';
+            $html .= '<button class="deletePost" <a href="javascript:void(0)"  data-post-id="' . $postId . '">Excluir</a></button>';
             $html .= '</div>';
 
             // Fechar a div do post
