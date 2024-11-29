@@ -29,13 +29,10 @@ try {
 
 <body>
     <header id="headerMain"></header>
-
-    <h1>Visualizar Posts</h1>
-    <a href="createPost.php">Criar Novo Post</a>
     <hr>
 
     <?php if (empty($posts)): ?>
-        <p>Não há posts disponíveis.</p>
+        <p class="msgErro">Não há posts cadastrados em seu banco de dados.</p>
     <?php else: ?>
         <?php foreach ($posts as $post): ?>
             <div>

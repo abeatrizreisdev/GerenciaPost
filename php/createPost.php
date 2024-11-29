@@ -89,29 +89,38 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 <body>
     <header id="headerMain"></header>
+    <br>
+    <p class="tituloGeral">Preencha o formulário abaixo:</p>
+    <form action="createPost.php" method="POST" enctype="multipart/form-data" class="formCriar">
+        <br>
+        <div class="tamForm">
+            <div class="labeForm">
+                <label for="tipo" class="labels">Tipo de Post:</label>
+                <select name="tipo" id="tipo" required>
+                    <option value="text">Texto</option>
+                    <option value="image">Imagem</option>
+                    <option value="video">Vídeo</option>
+                </select>
+            </div>
+            <br>
+            <div id="divConteudo">
+                <label for="conteudo" class="labels">Conteúdo/Texto:</label>
+                <textarea name="conteudo" id="conteudo" required></textarea><br>
+            </div>
+            <div class="labeForm">
+                <label for="imagem" class="labels">Imagem:</label>
+                <input type="file" name="imagem" id="imagem"><br>
+            </div>
+            <div class="labeForm">
+                <label for="video" class="labels">Vídeo:</label>
+                <input type="file" name="video" id="video"><br>
+            </div>
+        </div>
+        <br>
+        <br>
+        <input type="submit" value="Criar Post" id="btnCriar">
 
-    <h1>Criar Post</h1>
-    <form action="createPost.php" method="POST" enctype="multipart/form-data">
-        <label for="tipo">Tipo de Post:</label>
-        <select name="tipo" id="tipo" required>
-            <option value="text">Texto</option>
-            <option value="image">Imagem</option>
-            <option value="video">Vídeo</option>
-        </select><br>
-
-        <label for="conteudo">Conteúdo (apenas texto):</label>
-        <textarea name="conteudo" id="conteudo" required></textarea><br>
-
-        <label for="imagem">Imagem:</label>
-        <input type="file" name="imagem" id="imagem"><br>
-
-        <label for="video">Vídeo:</label>
-        <input type="file" name="video" id="video"><br>
-
-        <input type="submit" value="Criar Post">
     </form>
-
-    <a href="home.php">Voltar para Visualização</a>
 
     <script src="../js/header.js"></script>
 

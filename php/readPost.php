@@ -70,8 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
 
 <body>
     <header id="headerMain"></header>
-
-    <div>
+    <br>
+    <br>
+    <div class="search">
         <input type="text" id="search" placeholder="Buscar posts">
         <select id="filter">
             <option value="all">Todos</option>
@@ -81,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         </select>
         <button id="searchButton">Buscar</button>
     </div>
-
+    <br>
     <div id="postsContainer">
         <!-- Os posts serão carregados aqui -->
     </div>
