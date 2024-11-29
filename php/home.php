@@ -1,21 +1,12 @@
 <?php
 require_once __DIR__ . '/config/conexao.php';
 require_once __DIR__ . "/factory/PostFactory.php";
-require_once __DIR__ . '/facade/PostManager.php'; // Importa o PostManager
 require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
 
-// Instancia o logger e o gerenciador de posts
+// Instancia o logger
 $postLogger = new PostLogger();
-$postManager = new PostManager($postLogger); // Passe o logger para o PostManager
-
-try {
-    $db = Database::getInstance();
-    $query = $db->query("SELECT * FROM posts");
-    $posts = $query->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    die("Erro ao buscar os posts: " . $e->getMessage());
-}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,33 +21,74 @@ try {
 <body>
     <header id="headerMain"></header>
     <hr>
+    <div class="containerPost">
+        <?php
+        require_once __DIR__ . '/config/conexao.php';
+        require_once __DIR__ . "/factory/PostFactory.php";
+        require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
+        
+        // Instancia o logger
+        $postLogger = new PostLogger();
 
-    <?php if (empty($posts)): ?>
-        <p class="msgErro">Não há posts cadastrados em seu banco de dados.</p>
-    <?php else: ?>
-        <?php foreach ($posts as $post): ?>
-            <div>
-                <h3>Tipo: <?php echo htmlspecialchars($post['tipo']); ?></h3>
+        // Variável para armazenar o conteúdo HTML dos posts
+        $html = '<div class="ajustarMeio">';
+        $html = '<br>';
 
-                <?php if ($post['tipo'] === 'text' && !empty($post['texto'])): ?>
-                    <p>Texto: <?php echo htmlspecialchars($post['texto']); ?></p>
+        try {
+            // Conexão com o banco de dados e busca de todos os posts
+            $db = Database::getInstance();
+            $query = $db->query("SELECT * FROM posts");
+            $posts = $query->fetchAll(PDO::FETCH_ASSOC);
 
-                <?php elseif ($post['tipo'] === 'image' && !empty($post['imagem_url'])): ?>
-                    <img src="../uploads/<?php echo htmlspecialchars($post['imagem_url']); ?>" alt="Imagem do Post"
-                        style="max-width: 100%;">
+            // Começa a criar o HTML para o containerPost logo após o header
+            $html .= ''; // Inicia a div containerPost
+        
+            // Itera sobre cada post para gerar o HTML correspondente
+            foreach ($posts as $postData) {
+                // Instanciar o Post de acordo com o tipo
+                switch ($postData['tipo']) {
+                    case 'image':
+                        // Instanciando a classe específica para posts de imagem
+                        $post = new ImagePost($postData['id'], $postData['texto'], $postData['imagem_url'], new ImagePostStrategy());
+                        break;
 
-                <?php elseif ($post['tipo'] === 'video' && !empty($post['video_url'])): ?>
-                    <video controls>
-                        <source src="../uploads/<?php echo htmlspecialchars($post['video_url']); ?>" type="video/mp4">
-                        Seu navegador não suporta o vídeo.
-                    </video>
-                <?php else: ?>
-                    <p>Conteúdo não disponível ou tipo de post desconhecido.</p>
-                <?php endif; ?>
-            </div>
-            <hr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+                    case 'video':
+                        // Instanciando a classe específica para posts de vídeo
+                        $post = new VideoPost($postData['video_url'], $postData['texto'], $postData['id'], new VideoPostStrategy());
+                        break;
+
+                    case 'text':
+                        // Instanciando a classe específica para posts de texto
+                        $post = new TextPost($postData['texto'], $postData['id'], new TextPostStrategy());
+                        break;
+
+                    default:
+                        // Caso o tipo de post seja desconhecido
+                        throw new Exception("Tipo de post desconhecido.");
+                }
+
+                // Começa a criar o HTML para o post
+                if ($postData['tipo'] === 'image') {
+                    $html .= '<div class="postImagem">';
+                } elseif ($postData['tipo'] === 'video') {
+                    $html .= '<div class="postVideo">';
+                } else {
+                    $html .= '<div class="postTexto">';
+                }
+    
+                // Conteúdo principal do post
+                $html .= $post->display();
+                $html .= "</div>";
+            }
+
+            // Exibe o conteúdo HTML gerado para todos os posts dentro de containerPost
+            echo $html;
+
+        } catch (Exception $e) {
+            die("Erro ao buscar os posts: " . $e->getMessage());
+        }
+        ?>
+    </div>
 
     <script src="../js/header.js"></script>
 </body>

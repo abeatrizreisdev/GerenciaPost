@@ -7,10 +7,12 @@ class VideoPostStrategy implements PostStrategy {
         // Verifica se o post é uma instância de ImagePost e acessa o URL da imagem
         if ($post instanceof VideoPost) {
             $videoUrl = htmlspecialchars($post->getVideoUrl());
+            $id = htmlspecialchars($post->getId());  // Conteúdo genérico (texto)
             $conteudo = htmlspecialchars($post->getTexto());  // Conteúdo genérico (texto)
-            $html = "<h3>Video</h3>";
-            $html .= "<p>Conteúdo: " . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
-            $html .= "<video controls><source src='" . $videoUrl . "' type='video/mp4'></video>";  // Exibe o vídeo
+            $html = "<h3 id='tituloVideo'>Post do tipo Video com ID ". $id . "</h3>";
+            $html .= "<video id='videoPost' controls><source src='" . $videoUrl . "' type='video/mp4'></video>";  // Exibe o vídeo
+            $html .= "<p id='conteudoVideo'>" . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
+
         }
         return $html;
     }

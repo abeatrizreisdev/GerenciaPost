@@ -10,8 +10,9 @@ class TextPostStrategy implements PostStrategy {
         // Verifica se o post é uma instância de ImagePost e acessa o URL da imagem
         if ($post instanceof TextPost) {
             $conteudo = htmlspecialchars($post->getTexto());  // Conteúdo genérico (texto)
-            $html = "<h3>Textos</h3>";
-            $html .= "<p>Conteúdo: " . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
+            $id = htmlspecialchars($post->getId());  // Conteúdo genérico (texto)
+            $html = "<h3 id='tituloTexto'>Post do tipo Texto com ID ". $id."</h3>";
+            $html .= "<p id='conteudoTexto'>" . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
         }
         return $html;
     }

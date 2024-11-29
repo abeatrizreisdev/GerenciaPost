@@ -62,6 +62,21 @@ a:hover {
     font-size: 2vh;
 }
 
+.containerPost {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+
 
 
 /* pagina de criar post */
@@ -123,7 +138,7 @@ a:hover {
 
 /* pagina de procurar/editar posts */
 
-.search{
+.search {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,7 +146,7 @@ a:hover {
 }
 
 
-#search{
+#search {
     width: 25vw;
     height: 3vh;
     font-family: "Poppins";
@@ -139,19 +154,147 @@ a:hover {
     margin-right: 0.5vh;
 }
 
-#filter{
+#filter {
     height: 3.5vh;
     width: 8vw;
     font-family: "Poppins";
     margin-right: 0.5vh;
 }
 
-#searchButton{
+#searchButton {
     height: 3.5vh;
     width: 3.5vw;
     font-family: "Poppins";
 }
 
-#postsContainer{
+#postsContainer {
     text-align: center;
+}
+
+
+/* 
+EXIBIÇÃO DOS POSTS NO METODO STRATEGY
+ */
+
+.ajustarMeio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* AQUI COMEÇA
+A EXIBIÇÃO DA 
+IMAGEMSTRATEGY */
+.postImagem {
+    width: 40vw;
+    height: 70vh;
+    max-height: 80vh;
+    background-color: rgb(159, 171, 171);
+    border: 0.6vh solid gray;
+    border-radius: 2vh;
+    margin: 2vh;
+}
+
+#tituloImagem {
+    font-family: "Poppins";
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1vh;
+}
+
+#conteudoImagem {
+    font-family: "Poppins";
+    font-weight: 400;
+    text-align: justify;
+    margin: 1vh;
+    max-height: 20vh;
+}
+
+.imagemPost {
+    max-width: 35vw;
+    height: 50vh;
+    display: flex;
+    /* Usa flexbox para o alinhamento */
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    align-items: center;
+    /* Centraliza verticalmente */
+    text-align: center;
+    margin: 0 auto;
+    /* Garante que a div tenha margem automática para centralização */
+    border-radius: 1.5vh;
+}
+
+.imagemPost img {
+    max-width: 100%;
+    /* Garante que a imagem ocupe até 100% da largura disponível */
+    max-height: 100%;
+    /* Garante que a imagem ocupe até 100% da altura disponível */
+    object-fit: contain;
+    /* Faz com que a imagem mantenha suas proporções sem ultrapassar o contêiner */
+}
+
+/* AQUI COMEÇA
+A EXIBIÇÃO DO
+TEXTOSTRATEGY */
+
+.postTexto {
+    width: 50vw;
+    height: 40vh;
+    max-height: 50vh;
+    background-color: rgb(231, 231, 231);
+    border: 0.6vh solid rgb(251, 187, 187);
+    border-radius: 2vh;
+}
+
+#tituloTexto {
+    font-family: "Poppins";
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1vh;
+}
+
+#conteudoTexto {
+    font-family: "Poppins";
+    font-weight: 400;
+    text-align: justify;
+    margin: 1vh;
+    max-height: 20vh;
+}
+
+/* AQUI COMEÇA
+A EXIBIÇÃO DO
+VIDEOSTRATEGY */
+
+.postVideo {
+    width: 60vw;
+    height: 75vh;
+    max-height: 85vh;
+    background-color: rgb(231, 231, 231);
+    border: 0.6vh solid rgb(251, 187, 187);
+    border-radius: 2vh;
+}
+#tituloVideo {
+    font-family: "Poppins";
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+#conteudoVideo {
+    font-family: "Poppins";
+    font-weight: 400;
+    text-align: justify;
+    margin: 1vh;
+    max-height: 20vh;
+}
+#videoPost {
+    max-width: 80%; /* Ajuste a largura do vídeo */
+    height: auto; /* Mantém a proporção do vídeo */
+    display: block; /* Para garantir que o vídeo seja exibido como um bloco */
+    margin: 0 auto; /* Alinha o vídeo ao centro */
 }

@@ -72,18 +72,6 @@ class TextPost extends Post
 
     public function salvarPost()
     {
-        $db = Database::getInstance();
-        $sql = "UPDATE textPost SET texto = :texto WHERE id = :id";
-
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':texto', $this->getTexto());
-        $stmt->bindParam(':id', $this->getId());
-
-        if ($stmt->execute()) {
-            echo "Post de texto atualizado com sucesso!";
-        } else {
-            throw new Exception("Erro ao atualizar o post de texto.");
-        }
     }
 
     public function readPost()

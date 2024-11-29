@@ -89,19 +89,6 @@ class VideoPost extends Post
 
     public function salvarPost()
     {
-        $db = Database::getInstance();
-        $sql = "UPDATE videoPost SET texto = :texto, video_url = :video_url WHERE id = :id";
-
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':texto', $this->getTexto());
-        $stmt->bindParam(':video_url', $this->getVideoUrl());
-        $stmt->bindParam(':id', $this->getId());
-
-        if ($stmt->execute()) {
-            echo "Post de vídeo atualizado com sucesso!";
-        } else {
-            throw new Exception("Erro ao atualizar o post de vídeo.");
-        }
     }
 
     public function deletePost()

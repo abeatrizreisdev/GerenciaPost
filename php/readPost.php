@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
 
     // Verifique se encontrou posts
     if ($posts) {
-        $html = '';
+        $html = '<div class="ajustarMeio">';
         foreach ($posts as $postData) {
             // Verifique se o tipo de post é válido antes de criar o post
             $post = PostFactory::createPost(

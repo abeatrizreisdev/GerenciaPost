@@ -18,20 +18,18 @@ class ImagePost extends Post
     }
 
     // Getter e Setter para 'imagemUrl'
-    public function getImagemUrl()
-    {
-        return $this->imagemUrl;
+    public function getImagemUrl() {
+        return $this->imagemUrl; // Retorna o valor da propriedade $imagemUrl
     }
-
+    
     public function setImagemUrl($imagemUrl)
     {
         $this->imagemUrl = $imagemUrl;
     }
 
     // Getter e Setter para 'texto'
-    public function getTexto()
-    {
-        return $this->texto;
+    public function getTexto() {
+        return $this->texto; // Retorna o valor da propriedade $texto
     }
 
     public function setTexto($texto)
@@ -40,15 +38,15 @@ class ImagePost extends Post
     }
 
     // Getter e Setter para 'id'
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    
     public function setId($id)
     {
         $this->id = $id;
     }
+    public function getId() {
+        return $this->id; // Retorna o valor da propriedade $id
+    }
+
 
     public function saveToDatabase()
     {
@@ -98,20 +96,9 @@ class ImagePost extends Post
     // Método para salvar a alteração no banco de dados
     public function salvarPost()
     {
-        $db = Database::getInstance();
-        $sql = "UPDATE imagePost SET texto = :texto, imagem_url = :imagem_url WHERE id = :id";
-
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':texto', $this->getTexto());
-        $stmt->bindParam(':imagem_url', $this->getImagemUrl());
-        $stmt->bindParam(':id', $this->getId());
-
-        if ($stmt->execute()) {
-            echo "Post de imagem atualizado com sucesso!";
-        } else {
-            throw new Exception("Erro ao atualizar o post de imagem.");
-        }
     }
+
+
     public function deletePost()
     {
 

@@ -10,9 +10,9 @@ class ImagePostStrategy implements PostStrategy
             $id = htmlspecialchars($post->getId());
             $imageUrl = htmlspecialchars($post->getImagemUrl());
             $conteudo = htmlspecialchars($post->getTexto());  // Conteúdo genérico (texto)
-            $html = "<h3>Post do tipo Imagem com o ID: " . $id ."</h3>";
-            $html .= "<p class='teste'>Conteúdo: " . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
-            $html .= "<img src='" . $imageUrl . "' alt='Imagem do post' />";  // Exibe a imagem
+            $html = "<h3 id='tituloImagem'>Post do tipo Imagem com o ID " . $id ."</h3>";
+            $html .= "<p id='conteudoImagem'>" . $conteudo . "</p>";  // Exibe o conteúdo genérico (texto)
+            $html .= "<img class='imagemPost' src='" . $imageUrl . "' alt='Imagem do post' />";  // Exibe a imagem
         }
         return $html;
     }
