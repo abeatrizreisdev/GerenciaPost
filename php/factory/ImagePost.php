@@ -52,25 +52,31 @@ class ImagePost extends Post
 
     public function saveToDatabase()
     {
-        // Obter a conexão diretamente do Singleton
-        $db = Database::getInstance();
+        try {
+            // Obter a conexão diretamente do Singleton
+            $db = Database::getInstance();
 
-        // Inserir o post na tabela 'posts', incluindo imagem_url e texto
-        $query = "INSERT INTO posts (tipo) VALUES ('image')";
-        $stmt = $db->prepare($query);
-        $stmt->execute(); // Inserir o texto e a imagem_url
+            // Inserir o post na tabela 'posts', incluindo tipo, texto, imagem_url e video_url
+            $query = "INSERT INTO posts (tipo, texto, imagem_url, video_url) VALUES ('image', ?, ?, NULL)";
+            $stmt = $db->prepare($query);
+            $stmt->execute([$this->texto, $this->imagemUrl]); // Inserir o texto e imagem_url
 
-        // Obter o ID do post recém-criado
-        $postId = $db->lastInsertId();
+            // Obter o ID do post recém-criado
+            $postId = $db->lastInsertId();
 
-        // Inserir os dados na tabela 'imagePost' (a tabela de detalhes da imagem)
-        $query = "INSERT INTO imagePost (id, imagem_url, texto) VALUES (?, ?, ?)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$postId, $this->imagemUrl, $this->texto]);
+            // Inserir os dados na tabela 'imagePost' (a tabela de detalhes da imagem)
+            $query = "INSERT INTO imagePost (id, imagem_url, texto) VALUES (?, ?, ?)";
+            $stmt = $db->prepare($query);
+            $stmt->execute([$postId, $this->imagemUrl, $this->texto]);
 
-        // Exibir a URL da imagem para confirmar a inserção
-        echo "Imagem salva no banco de dados: " . $this->imagemUrl . "<br>";
+            // Exibir a URL da imagem para confirmar a inserção
+            echo "Imagem salva no banco de dados: " . $this->imagemUrl . "<br>";
+        } catch (Exception $e) {
+            // Exibir erro caso algo dê errado
+            echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "<br>";
+        }
     }
+
     public function readPost()
     {
 

@@ -34,30 +34,32 @@ class TextPost extends Post
         $this->id = $id;
     }
     public function saveToDatabase()
-    {
-        try {
-            // Debug: Verificar conteúdo antes de salvar
-            error_log("Tentando salvar o texto: " . $this->texto);
+{
+    try {
+        // Debug: Verificar conteúdo antes de salvar
+        error_log("Tentando salvar o texto: " . $this->texto);
 
-            $db = Database::getInstance();
+        $db = Database::getInstance();
 
-            // Inserir na tabela 'posts'
-            $query = "INSERT INTO posts (tipo) VALUES ('text')";
-            $stmt = $db->prepare($query);
-            $stmt->execute();
+        // Inserir na tabela 'posts' (tabela principal)
+        $query = "INSERT INTO posts (tipo, texto, imagem_url, video_url) VALUES ('text', ?, NULL, NULL)";
+        $stmt = $db->prepare($query);
+        $stmt->execute([$this->texto]);
 
-            $postId = $db->lastInsertId();
+        // Obter o ID do post inserido
+        $postId = $db->lastInsertId();
 
-            // Inserir na tabela 'textPost'
-            $query = "INSERT INTO textPost (id, texto) VALUES (?, ?)";
-            $stmt = $db->prepare($query);
-            $stmt->execute([$postId, $this->texto]);
+        // Agora você pode opcionalmente inserir o texto na tabela textPost, se desejar
+        $query = "INSERT INTO textPost (id, texto) VALUES (?, ?)";
+        $stmt = $db->prepare($query);
+        $stmt->execute([$postId, $this->texto]);
 
-            echo "Post salvo no banco de dados: " . $this->texto . "\n";
-        } catch (Exception $e) {
-            echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
-        }
+        echo "Post salvo no banco de dados: " . $this->texto . "\n";
+    } catch (Exception $e) {
+        echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
     }
+}
+
 
 
     public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)

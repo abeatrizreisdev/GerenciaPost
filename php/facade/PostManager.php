@@ -63,39 +63,47 @@ class PostManager
             // Ajuste da consulta dependendo do tipo de filtro
             switch ($tipo) {
                 case 'all':
-                    $sql = "SELECT id AS id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo
-                        UNION
-                        SELECT id AS id, imagem_url AS texto, 'image' AS tipo FROM imagePost WHERE imagem_url LIKE :conteudo
-                        UNION
-                        SELECT id AS id, video_url AS texto, 'video' AS tipo FROM videoPost WHERE video_url LIKE :conteudo";
+                    // Buscar todos os campos das 3 tabelas (textPost, imagePost, videoPost)
+                    $sql = "SELECT id, texto, tipo, imagem_url, video_url FROM posts WHERE texto LIKE :conteudo";
                     break;
                 case 'image':
-                    $sql = "SELECT id AS id, imagem_url AS texto, 'image' AS tipo FROM imagePost WHERE imagem_url LIKE :conteudo";
+                    // Consultar apenas os campos da tabela imagePost
+                    $sql = "SELECT id, texto, 'image' AS tipo, imagem_url FROM imagePost WHERE texto LIKE :conteudo";
                     break;
                 case 'text':
-                    $sql = "SELECT id AS id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo";
+                    // Consultar apenas os campos da tabela textPost
+                    $sql = "SELECT id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo";
                     break;
                 case 'video':
-                    $sql = "SELECT id AS id, video_url AS texto, 'video' AS tipo FROM videoPost WHERE video_url LIKE :conteudo";
+                    // Consultar apenas os campos da tabela videoPost
+                    $sql = "SELECT id, texto, 'video' AS tipo, video_url FROM videoPost WHERE texto LIKE :conteudo";
                     break;
                 default:
                     throw new Exception("Tipo de filtro inválido: $tipo");
             }
-            $params[':conteudo'] = '%' . $conteudo . '%';  // O parâmetro da busca
 
+            // Parâmetro de busca com o conteúdo
+            $params[':conteudo'] = '%' . $conteudo . '%';  // Parâmetro de busca no texto
+
+            // Preparar e executar a consulta
             $stmt = $db->prepare($sql);
-            $stmt->execute($params);  // consulta com os parâmetros
+            $stmt->execute($params);
 
-            //posts encontrados
+            // Resultados encontrados
             $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return $resultados;
+            // Retorna os resultados ou um array vazio caso não haja resultados
+            return $resultados ? $resultados : [];
+
         } catch (PDOException $e) {
-            // Usa o método log() para registrar a exceção
+            // Registra a exceção no log
             $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
             return null;
         }
     }
+
+
+
 
 
     public function editarPost($postId, $novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
