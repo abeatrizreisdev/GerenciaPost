@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter'])) {
         $html = '';
         foreach ($posts as $postData) {
             // Verifique se o tipo de post é válido antes de criar o post
-            var_dump($postData);
             $post = PostFactory::createPost(
                 $postData['tipo'],
                 $postData['id'],

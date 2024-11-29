@@ -49,7 +49,7 @@ class TextPost extends Post
             $postId = $db->lastInsertId();
 
             // Inserir na tabela 'textPost'
-            $query = "INSERT INTO textPost (id_post, texto) VALUES (?, ?)";
+            $query = "INSERT INTO textPost (id, texto) VALUES (?, ?)";
             $stmt = $db->prepare($query);
             $stmt->execute([$postId, $this->texto]);
 

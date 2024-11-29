@@ -9,39 +9,46 @@ class ImagePost extends Post
     public $texto;
 
 
-    public function __construct($imagemUrl, $texto = null, $id = null, PostStrategy $strategy)
+    public function __construct($id = null, $texto, $imagemUrl, PostStrategy $strategy)
     {
         parent::__construct($strategy);
-        $this->imagemUrl = $imagemUrl;
-        $this->texto = $texto;
         $this->id = $id;
+        $this->texto = $texto;
+        $this->imagemUrl = $imagemUrl;
     }
+
+    // Getter e Setter para 'imagemUrl'
     public function getImagemUrl()
     {
         return $this->imagemUrl;
     }
+
     public function setImagemUrl($imagemUrl)
     {
         $this->imagemUrl = $imagemUrl;
     }
+
     // Getter e Setter para 'texto'
     public function getTexto()
     {
         return $this->texto;
     }
+
     public function setTexto($texto)
     {
         $this->texto = $texto;
     }
+
+    // Getter e Setter para 'id'
     public function getId()
     {
         return $this->id;
     }
+
     public function setId($id)
     {
         $this->id = $id;
     }
-
 
     public function saveToDatabase()
     {
@@ -57,7 +64,7 @@ class ImagePost extends Post
         $postId = $db->lastInsertId();
 
         // Inserir os dados na tabela 'imagePost' (a tabela de detalhes da imagem)
-        $query = "INSERT INTO imagePost (id_post, imagem_url, texto) VALUES (?, ?, ?)";
+        $query = "INSERT INTO imagePost (id, imagem_url, texto) VALUES (?, ?, ?)";
         $stmt = $db->prepare($query);
         $stmt->execute([$postId, $this->imagemUrl, $this->texto]);
 

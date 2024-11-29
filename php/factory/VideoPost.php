@@ -26,8 +26,8 @@ class VideoPost extends Post {
         return $this->texto;
     }
 
-    public function setTexto($conteudo) {
-        $this->texto = $conteudo;
+    public function setTexto($texto) {
+        $this->texto = $texto;
     }
     public function getId() {
         return $this->id;
@@ -51,7 +51,7 @@ class VideoPost extends Post {
         $postId = $db->lastInsertId();
     
         // Inserir os dados do vídeo na tabela 'videoPost'
-        $query = "INSERT INTO videoPost (id_post, video_url, texto) VALUES (?, ?, ?)";
+        $query = "INSERT INTO videoPost (id, video_url, texto) VALUES (?, ?, ?)";
         $stmt = $db->prepare($query);
         // Passando os valores para o execute
         $stmt->execute([$postId, $this->videoUrl, $this->texto]);

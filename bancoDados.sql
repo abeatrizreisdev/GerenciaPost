@@ -9,21 +9,21 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE textPost (
-    id_post INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     texto TEXT NOT NULL,
-    FOREIGN KEY (id_post) REFERENCES posts(id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
 CREATE TABLE imagePost (
-    id_post INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     imagem_url VARCHAR(255) NOT NULL,
     texto TEXT NULL,
-    FOREIGN KEY (id_post) REFERENCES posts(id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
 CREATE TABLE videoPost (
-    id_post INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     video_url VARCHAR(255) NOT NULL,
     texto TEXT NULL,
-    FOREIGN KEY (id_post) REFERENCES posts(id) ON DELETE CASCADE
+    FOREIGN KEY (id) REFERENCES posts(id) ON DELETE CASCADE
 );
