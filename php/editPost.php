@@ -1,56 +1,81 @@
 <?php
-require_once 'config/conexao.php';
-require_once 'factory/PostFactory.php';
-require_once 'facade/PostManager.php';
-require_once 'observer/PostLogger.php';
+require_once __DIR__ . '/config/conexao.php';
+require_once __DIR__ . '/factory/TextPost.php';
+require_once __DIR__ . '/factory/ImagePost.php';
+require_once __DIR__ . '/factory/VideoPost.php';
+require_once __DIR__ . '/facade/PostManager.php'; // A classe que gerencia as atualizações
 
-// Instanciar gerenciador de posts
-$postLogger = new PostLogger();
-$postManager = new PostManager($postLogger);
+$logger = new PostLogger();
 
-// Variáveis de erro e sucesso
-$mensagem = '';
-$erro = false;
-
-// Verifica se o ID do post foi passado pela URL
+// Agora instancie o PostManager com o logger
+$postManager = new PostManager($logger);
+// Verificar se o ID do post foi passado na URL
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
 
-    // Buscar o post usando o PostManager
-    $post = $postManager->buscarPostPorId($postId);
+    // Obter a conexão com o banco de dados usando Singleton
+    $db = Database::getInstance();
 
+    // Consultar o post no banco de dados para carregar os dados
+    $query = "SELECT texto, imagem_url, video_url, tipo FROM posts WHERE id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':id', $postId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verificar se o post foi encontrado
     if (!$post) {
-        echo "Post não encontrado!";
+        echo "Post não encontrado.";
         exit;
     }
 
-    // Preparar os dados do post para a edição
-    $textoPost = htmlspecialchars($post->getTexto());
-    // Se o post for do tipo imagem ou vídeo, pegue a URL do arquivo também
-    $imagemUrl = $post->getImagemUrl() ?? '';
-    $videoUrl = $post->getVideoUrl() ?? '';
+    // Inicializar as variáveis com os valores existentes
+    $texto = $post['texto'];
+    $imagemUrl = $post['imagem_url'];
+    $videoUrl = $post['video_url'];
+    $tipoPost = $post['tipo']; // Tipo do post (TextPost, ImagePost, VideoPost)
 } else {
     echo "ID do post não fornecido.";
     exit;
 }
 
-// Processa o formulário de edição
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $postId = $_POST['id'];
-    $novoTexto = $_POST['texto'];
-    $novaImagemUrl = $_POST['imagem'] ?? null;
-    $novoVideoUrl = $_POST['video'] ?? null;
+// Verificar se o formulário foi enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Obter os dados do formulário
+    $texto = $_POST['texto'];
+    $videoUrl = isset($_FILES['video_url']) && $_FILES['video_url']['error'] == 0 ? 'uploads/' . $_FILES['video_url']['name'] : $videoUrl;
+    $imagemUrl = isset($_FILES['imagem_url']) && $_FILES['imagem_url']['error'] == 0 ? 'uploads/' . $_FILES['imagem_url']['name'] : $imagemUrl;
+
+    // Fazer upload dos arquivos se forem enviados
+    if (isset($_FILES['imagem_url']) && $_FILES['imagem_url']['error'] == 0) {
+        move_uploaded_file($_FILES['imagem_url']['tmp_name'], $imagemUrl);
+    }
+
+    if (isset($_FILES['video_url']) && $_FILES['video_url']['error'] == 0) {
+        move_uploaded_file($_FILES['video_url']['tmp_name'], $videoUrl);
+    }
+
+    // Preparar os dados para o PostManager
+    $dados = [
+        'texto' => $texto,
+        'video' => $videoUrl,
+        'imagem' => $imagemUrl
+    ];
+
 
     try {
-        // Atualiza o post
-        $postManager->editarPost($postId, $novoTexto, $novaImagemUrl, $novoVideoUrl);
-        $mensagem = "Post atualizado com sucesso!";
+        // Atualizar o post de acordo com seu tipo
+        $postManager->editarPost($postId, $dados);
+        
+        // Redirecionar para home.php
+        header("Location: home.php"); // Redireciona para a página home.php
+        exit; // Certifique-se de que o script não continua após o redirecionamento
     } catch (Exception $e) {
-        $erro = true;
-        $mensagem = "Erro ao atualizar post: " . $e->getMessage();
+        // Em caso de erro, exibe a mensagem de erro
+        echo "Erro: " . $e->getMessage();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -58,32 +83,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Post</title>
+    <link rel="stylesheet" href="../css/geral.css">
+    <title>Visualização de Posts</title>
 </head>
+
 <body>
+    <header id="headerMain"></header>
+    <hr>
     <h1>Editar Post</h1>
+    <form action="editPost.php?id=<?php echo $postId; ?>" method="POST" enctype="multipart/form-data">
+        <label for="texto">Texto:</label>
+        <textarea id="texto" name="texto" rows="4" cols="50"><?php echo htmlspecialchars($texto); ?></textarea>
+        <br>
 
-    <?php if ($mensagem): ?>
-        <p style="color: <?php echo $erro ? 'red' : 'green'; ?>"><?php echo $mensagem; ?></p>
-    <?php endif; ?>
+        <label for="imagem_url">Imagem (opcional):</label>
+        <input type="file" id="imagem_url" name="imagem_url">
+        <br>
 
-    <form method="POST" action="editPost.php">
-        <input type="hidden" name="id" value="<?php echo $postId; ?>">
+        <label for="video_url">Vídeo (opcional):</label>
+        <input type="file" id="video_url" name="video_url">
+        <br>
 
-        <label for="texto">Texto do Post</label><br>
-        <textarea name="texto" id="texto" rows="4" cols="50"><?php echo $textoPost; ?></textarea><br>
-
-        <?php if ($imagemUrl): ?>
-            <label for="imagem">Imagem URL</label><br>
-            <input type="text" name="imagem" id="imagem" value="<?php echo $imagemUrl; ?>"><br>
-        <?php endif; ?>
-
-        <?php if ($videoUrl): ?>
-            <label for="video">Vídeo URL</label><br>
-            <input type="text" name="video" id="video" value="<?php echo $videoUrl; ?>"><br>
-        <?php endif; ?>
-
-        <button type="submit">Salvar Alterações</button>
+        <button type="submit">Atualizar Post</button>
     </form>
+
+    <script src="../js/header.js"></script>
 </body>
 </html>

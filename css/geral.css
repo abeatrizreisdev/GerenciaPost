@@ -174,25 +174,30 @@ a:hover {
     text-align: center;
 }
 
-
-.editPost{
-    width: 8vw;
-    font-family: "Poppins";
-    background-color: rgb(117, 115, 115);
-    border: 0.2vh solid gray;
-    border-radius: 1vh;
-    margin: 1vh;
+a {
+    text-decoration: none;  /* Remove o sublinhado */
+    color: inherit;  /* Herda a cor do texto do elemento pai */
 }
 
-.deletePost{
-    width: 8vw;
-    font-family: "Poppins";
-    background-color: rgb(241, 102, 102);
-    border: 0.2vh solid gray;
-    border-radius: 1vh;
-    margin: 1vh;
+.editPost {
+    text-decoration: none !important;
+    font-family: "Poppins" !important;
+    background-color: rgb(117, 115, 115) !important;
+    border: 0.2vh solid gray !important;
+    border-radius: 1vh !important;
+    margin: 1vh !important;
+    width: 8vw !important;
 }
 
+.deletePost {
+    text-decoration: none !important;
+    font-family: "Poppins" !important;
+    background-color: rgb(241, 102, 102) !important;
+    border: 0.2vh solid gray !important;
+    border-radius: 1vh !important;
+    margin: 1vh !important;
+    width: 15vw !important;
+}
 
 .editPost,.deletePost:hover{
     cursor: pointer;

@@ -18,17 +18,19 @@ class ImagePost extends Post
     }
 
     // Getter e Setter para 'imagemUrl'
-    public function getImagemUrl() {
+    public function getImagemUrl()
+    {
         return $this->imagemUrl; // Retorna o valor da propriedade $imagemUrl
     }
-    
+
     public function setImagemUrl($imagemUrl)
     {
         $this->imagemUrl = $imagemUrl;
     }
 
     // Getter e Setter para 'texto'
-    public function getTexto() {
+    public function getTexto()
+    {
         return $this->texto; // Retorna o valor da propriedade $texto
     }
 
@@ -38,12 +40,13 @@ class ImagePost extends Post
     }
 
     // Getter e Setter para 'id'
-    
+
     public function setId($id)
     {
         $this->id = $id;
     }
-    public function getId() {
+    public function getId()
+    {
         return $this->id; // Retorna o valor da propriedade $id
     }
 
@@ -79,18 +82,38 @@ class ImagePost extends Post
     {
 
     }
-    public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
+    public function editarPost($texto, $videoUrl, $imagemUrl)
     {
-        // Atualiza o texto
-        $this->setTexto($novoTexto);
-
-        // Atualiza a imagem, se fornecida
-        if ($novaImagemUrl) {
-            $this->setImagemUrl($novaImagemUrl);
+        try {
+            // Obter a instância da conexão com o banco de dados
+            $db = Database::getInstance();
+            
+            // Iniciar a transação
+            $db->beginTransaction();
+            
+            // Atualizar tabela 'posts' com 'texto' e 'imagem_url'
+            $query = "UPDATE posts SET texto = :texto, imagem_url = :imagem WHERE id = :id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':texto', $texto);
+            $stmt->bindParam(':imagem', $imagemUrl);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // Atualizar tabela 'imagepost' com 'texto' e 'imagem_url'
+            $query = "UPDATE imagePost SET texto = :texto, imagem_url = :imagem WHERE id = :id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':texto', $texto);
+            $stmt->bindParam(':imagem', $imagemUrl);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // Finalizar a transação
+            $db->commit();
+        } catch (PDOException $e) {
+            // Reverter as alterações em caso de erro
+            $db->rollBack();
+            echo "Erro: " . $e->getMessage();
         }
-
-        // Agora, faz o update no banco de dados (método para salvar a atualização no banco)
-        $this->salvarPost();
     }
 
     // Método para salvar a alteração no banco de dados
@@ -99,7 +122,8 @@ class ImagePost extends Post
     }
 
 
-    public function deletePost() {
+    public function deletePost()
+    {
         $db = Database::getInstance();
         $stmt = $db->prepare("DELETE FROM posts WHERE id = :id");
         $stmt->bindParam(':id', $this->id);

@@ -30,7 +30,7 @@ abstract class Post {
 
     abstract public function saveToDatabase();
 
-    abstract public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null);
+    abstract public function editarPost($texto, $videoUrl, $imagemUrl);
 
     abstract public function salvarPost();
     

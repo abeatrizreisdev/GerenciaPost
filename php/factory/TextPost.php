@@ -62,13 +62,37 @@ class TextPost extends Post
 
 
 
-    public function editarPost($novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
-    {
-        // Atualiza o texto do post
-        $this->texto = $novoTexto;
-
-        $this->salvarPost();
+public function editarPost($texto, $videoUrl, $imagemUrl) {
+    try {
+        // Obter a instância da conexão com o banco de dados
+        $db = Database::getInstance();
+        
+        // Iniciar a transação
+        $db->beginTransaction();
+        
+        // Atualizar tabela 'posts' com 'texto'
+        $query = "UPDATE posts SET texto = :texto WHERE id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':texto', $texto);
+        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        // Atualizar tabela 'imagepost' com 'texto'
+        $query = "UPDATE textPost SET texto = :texto WHERE id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':texto', $texto);
+        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        // Finalizar a transação
+        $db->commit();
+    } catch (PDOException $e) {
+        // Reverter as alterações em caso de erro
+        $db->rollBack();
+        echo "Erro: " . $e->getMessage();
     }
+}
+
 
     public function salvarPost()
     {
