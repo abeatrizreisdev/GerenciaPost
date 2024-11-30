@@ -88,6 +88,8 @@ if (isset($_GET['id'])) {
         // Retorna sucesso
     }
 }
+echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
+
 ?>
 
 <!DOCTYPE html>
@@ -125,6 +127,8 @@ if (isset($_GET['id'])) {
     <script src="../js/buscarPost.js"></script>
     <script src="../js/header.js"></script>
     <script src="../js/btnEditarPost.js"></script>
+    <script src="../js/notify.js"></script>
+
 
 </body>
 

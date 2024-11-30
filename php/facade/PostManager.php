@@ -102,6 +102,7 @@ class PostManager
         }
     }
 
+
     public function editarPost($postId, $dados)
     {
         // Buscar o post pelo ID

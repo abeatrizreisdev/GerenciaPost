@@ -5,6 +5,8 @@ require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
 
 // Instancia o logger
 $postLogger = new PostLogger();
+echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
+
 ?>
 
 
@@ -94,6 +96,8 @@ $postLogger = new PostLogger();
     </div>
 
     <script src="../js/header.js"></script>
+    <script src="../js/notify.js"></script>
+
 </body>
 
 </html>

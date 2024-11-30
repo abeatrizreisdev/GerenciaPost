@@ -10,7 +10,7 @@ class PostLogger implements PostObserver {
 
         // Exibe a notificação bonita utilizando Toastr
         echo "<script>showNotification('$message', '$event');</script>";
-    }
+    }   
 
     private function generateLogMessage(Post $post, $event) {
         $timestamp = date('Y-m-d H:i:s');

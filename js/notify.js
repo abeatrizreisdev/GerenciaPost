@@ -2,7 +2,7 @@ toastr.options = {
     "closeButton": true,  // Exibe o botão de fechar
     "debug": false,
     "newestOnTop": true,  // As notificações mais recentes aparecem em cima
-    "progressBar": true,  // Exibe barra de progresso
+    "progressBar": true,  // Exibe a barra de progresso
     "positionClass": "toast-top-right",  // Posição da notificação (canto superior direito)
     "preventDuplicates": true,  // Evita duplicação de notificações
     "onclick": null,
@@ -12,25 +12,22 @@ toastr.options = {
     "extendedTimeOut": "1000"
 };
 
-// Exemplo de exibição de notificações
-function showNotification(message, type) {
+// Função para exibir uma notificação personalizada
+function showNotification(type) {
     switch (type) {
-        case 'success':
-            toastr.success(message);  // Notificação de sucesso
+        case 'created':
+            toastr.success("Post Criado Com Sucesso");  // Notificação de sucesso
             break;
-        case 'info':
-            toastr.info(message);  // Notificação de informação
+        case 'updated':
+            toastr.info("Post Atualizado com Sucesso");  // Notificação de informação
             break;
-        case 'warning':
-            toastr.warning(message);  // Notificação de alerta
-            break;
-        case 'error':
-            toastr.error(message);  // Notificação de erro
+        case 'deleted':
+            toastr.warning("Post Apagado com Sucesso");  // Notificação de alerta
             break;
         default:
-            toastr.info(message);  // Caso o tipo não seja identificado, exibe como informação
+            toastr.info("Não identificado");  // Caso o tipo não seja identificado, exibe como informação
+            break;
     }
 }
 
-// Teste da notificação
-showNotification('Post criado com sucesso!', 'success');
+// Teste da notificação (exemplo de criação de post)
