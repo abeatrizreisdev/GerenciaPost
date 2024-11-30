@@ -20,7 +20,7 @@ class ImagePost extends Post
     // Getter e Setter para 'imagemUrl'
     public function getImagemUrl()
     {
-        return $this->imagemUrl; // Retorna o valor da propriedade $imagemUrl
+        return $this->imagemUrl;
     }
 
     public function setImagemUrl($imagemUrl)
@@ -31,7 +31,7 @@ class ImagePost extends Post
     // Getter e Setter para 'texto'
     public function getTexto()
     {
-        return $this->texto; // Retorna o valor da propriedade $texto
+        return $this->texto;
     }
 
     public function setTexto($texto)
@@ -89,10 +89,10 @@ class ImagePost extends Post
         try {
             // Obter a instância da conexão com o banco de dados
             $db = Database::getInstance();
-            
+
             // Iniciar a transação
             $db->beginTransaction();
-            
+
             // Atualizar tabela 'posts' com 'texto' e 'imagem_url'
             $query = "UPDATE posts SET texto = :texto, imagem_url = :imagem WHERE id = :id";
             $stmt = $db->prepare($query);
@@ -100,7 +100,7 @@ class ImagePost extends Post
             $stmt->bindParam(':imagem', $imagemUrl);
             $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             // Atualizar tabela 'imagepost' com 'texto' e 'imagem_url'
             $query = "UPDATE imagePost SET texto = :texto, imagem_url = :imagem WHERE id = :id";
             $stmt = $db->prepare($query);
@@ -108,7 +108,7 @@ class ImagePost extends Post
             $stmt->bindParam(':imagem', $imagemUrl);
             $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
             $stmt->execute();
-            
+
             // Finalizar a transação
             $db->commit();
         } catch (PDOException $e) {
@@ -117,12 +117,6 @@ class ImagePost extends Post
             echo "Erro: " . $e->getMessage();
         }
     }
-
-    // Método para salvar a alteração no banco de dados
-    public function salvarPost()
-    {
-    }
-
 
     public function deletePost()
     {

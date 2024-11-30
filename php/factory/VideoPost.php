@@ -110,11 +110,6 @@ class VideoPost extends Post
             echo "Erro: " . $e->getMessage();
         }
     }
-    
-
-    public function salvarPost()
-    {
-    }
 
     public function deletePost() {
         $db = Database::getInstance();

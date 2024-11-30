@@ -1,24 +1,16 @@
 <?php
 abstract class Post {
     protected $strategy;
-    protected$tipo;
 
     public function __construct(PostStrategy $strategy) {
         $this->strategy = $strategy;
     }
 
-    public function setStrategy($strategy) {
+    public function setStrategy(PostStrategy $strategy) {
         $this->strategy = $strategy;
     }
-    public function getStrategy() {
+    public function getStrategy(): PostStrategy {
         return $this->strategy;
-    }
-
-    public function settipo($tipo) {
-        $this->tipo = $tipo;
-    }
-    public function getTipo() {
-        return $this->tipo;
     }
 
     public function display() {
@@ -31,8 +23,6 @@ abstract class Post {
     abstract public function saveToDatabase();
 
     abstract public function editarPost($texto, $videoUrl, $imagemUrl);
-
-    abstract public function salvarPost();
     
     abstract public function readPost($conteudo);
 

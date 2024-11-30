@@ -92,11 +92,6 @@ public function editarPost($texto, $videoUrl, $imagemUrl) {
     }
 }
 
-
-    public function salvarPost()
-    {
-    }
-
     public function readPost($conteudo)
     {
         // Garantindo que a variável $conteudo seja definida e usada corretamente

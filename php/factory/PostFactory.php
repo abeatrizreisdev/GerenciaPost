@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ .'/../factory/Post.php';
+require_once __DIR__ .'/../factory/Factory.php';
 require_once __DIR__ .  ('/../factory/Post.php');
 require_once __DIR__ .  ('/../factory/TextPost.php');
 require_once __DIR__ .  ('/../factory/ImagePost.php');
@@ -9,7 +10,7 @@ require_once __DIR__ .  ('/../strategy/TextPostStrategy.php');
 require_once __DIR__ .  ('/../strategy/ImagePostStrategy.php');
 require_once __DIR__ .  ('/../strategy/VideoPostStrategy.php');
 
-class PostFactory {
+class PostFactory extends Factory{
     public static function createPost($tipo, $id, $texto = null, $imagemUrl = null, $videoUrl = null) {
         if ($tipo == 'text') {
             return new TextPost($texto, $id, new TextPostStrategy());  // Sem imagem e sem vídeo
