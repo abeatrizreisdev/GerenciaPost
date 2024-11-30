@@ -63,14 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = $postManager->createPost($tipo, $conteudo, null, null);  // Apenas conteúdo
         }
 
-        echo "Post criado e salvo com sucesso!";
     } catch (Exception $e) {
         echo "Erro ao criar o post: " . $e->getMessage();
     }
 
 }
-
-echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 
 ?>

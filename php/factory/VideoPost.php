@@ -67,7 +67,6 @@ class VideoPost extends Post
         // Passando os valores corretamente
         $stmt->execute([$postId, $this->videoUrl, $this->texto]);
 
-        echo "Vídeo salvo no banco de dados: " . $this->videoUrl . "\n";
     }
     public function readPost($conteudo)
     {
@@ -78,7 +77,7 @@ class VideoPost extends Post
         $stmt->execute([':conteudo' => "%" . $conteudo . "%"]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     public function editarPost($texto, $videoUrl, $imagemUrl) {
         try {
             // Obter a instância da conexão com o banco de dados

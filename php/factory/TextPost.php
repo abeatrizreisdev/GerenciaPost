@@ -54,7 +54,6 @@ class TextPost extends Post
         $stmt = $db->prepare($query);
         $stmt->execute([$postId, $this->texto]);
 
-        echo "Post salvo no banco de dados: " . $this->texto . "\n";
     } catch (Exception $e) {
         echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "\n";
     }

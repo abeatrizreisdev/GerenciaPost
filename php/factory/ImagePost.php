@@ -69,8 +69,6 @@ class ImagePost extends Post
             $stmt = $db->prepare($query);
             $stmt->execute([$postId, $this->imagemUrl, $this->texto]);
 
-            // Exibir a URL da imagem para confirmar a inserção
-            echo "Imagem salva no banco de dados: " . $this->imagemUrl . "<br>";
         } catch (Exception $e) {
             // Exibir erro caso algo dê errado
             echo "Erro ao salvar o post no banco de dados: " . $e->getMessage() . "<br>";
