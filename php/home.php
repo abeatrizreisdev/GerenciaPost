@@ -2,9 +2,11 @@
 require_once __DIR__ . '/config/conexao.php';
 require_once __DIR__ . "/factory/PostFactory.php";
 require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
+require_once __DIR__ . '/facade/PostManager.php'; // Importa o PostLogger
 
 // Instancia o logger
 $postLogger = new PostLogger();
+$postManager = new PostManager($postLogger);
 echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 ?>

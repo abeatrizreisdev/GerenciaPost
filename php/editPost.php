@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         // Atualizar o post de acordo com seu tipo
         $postManager->editarPost($postId, $dados);
-        
+
         // Redirecionar para home.php
         header("Location: home.php"); // Redireciona para a página home.php
         exit; // Certifique-se de que o script não continua após o redirecionamento
@@ -81,33 +81,48 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/geral.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <title>Editar Post</title>
 </head>
+
 <body>
-    <h1>Editar Post</h1>
+    <header id="headerMain"></header>
+    <br>
+    <p class="tituloGeral">Editar Post</p>
     <form action="editPost.php?id=<?php echo $postId; ?>" method="POST" enctype="multipart/form-data">
-        <label for="texto">Texto:</label>
-        <textarea id="texto" name="texto" rows="4" cols="50"><?php echo htmlspecialchars($texto); ?></textarea>
-        <br>
+        <div class="tamaForm">
+            <div id="divConteudo">
+                <label for="texto" class="labels">Texto:</label>
+                <textarea id="conteudo" name="texto" rows="4"
+                    cols="50"><?php echo htmlspecialchars($texto); ?></textarea>
+            </div>
+            <br>
+            <div class="labeForm">
+                <label for="imagem_url" class="labels">Imagem (opcional):</label>
+                <input type="file" id="imagem_url" name="imagem_url">
+            </div>
+            <br>
+            <div class="labeForm">
+                <label for="video_url" class="labels">Vídeo (opcional):</label>
+                <input type="file" id="video_url" name="video_url">
+            </div>
 
-        <label for="imagem_url">Imagem (opcional):</label>
-        <input type="file" id="imagem_url" name="imagem_url">
-        <br>
-
-        <label for="video_url">Vídeo (opcional):</label>
-        <input type="file" id="video_url" name="video_url">
-        <br>
-
-        <button type="submit">Atualizar Post</button>
+            <br>
+            <br>
+            <button type="submit" id="btnCriar">Atualizar Post</button>
+        </div>
     </form>
-    
+
+    <script src="../js/header.js"></script>
     <script src="../js/notify.js"></script>
 
 </body>
+
 </html>

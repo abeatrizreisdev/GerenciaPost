@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
+
 ?>
 
 <!-- Formulário HTML -->

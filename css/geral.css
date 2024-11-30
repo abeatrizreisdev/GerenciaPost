@@ -334,3 +334,12 @@ VIDEOSTRATEGY */
     display: block; /* Para garantir que o vídeo seja exibido como um bloco */
     margin: 0 auto; /* Alinha o vídeo ao centro */
 }
+
+/* editpost */
+
+.tamaForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
