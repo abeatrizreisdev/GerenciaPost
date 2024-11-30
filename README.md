@@ -65,8 +65,6 @@ Os padrões de projeto são fundamentais para criar sistemas robustos, organizad
 
 ## Estrutura do Projeto
 
-## Estrutura do Projeto
-
 O projeto está organizado nas seguintes pastas e arquivos:
 
 ### 1. **/css**  
