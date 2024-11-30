@@ -98,40 +98,32 @@ class PostManager
     }
 
 
-    public function editarPost($postId, $novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
+    public function editarPost($postId, $dados)
     {
-        // Buscar o post por ID
+        // Buscar o post pelo ID
         $post = $this->buscarPostPorId($postId);
 
-        if ($post) {
-            // Verificar o tipo do post e delegar a edição para a classe específica
-            switch ($post->getTipo()) {
-                case 'image':
-                    // Se for post de imagem, cria uma instância de ImagePost e delega a edição
-                    $postImage = new ImagePost($post->getImagemUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
-                    $postImage->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
-                    break;
-
-                case 'video':
-                    // Se for post de vídeo, cria uma instância de VideoPost e delega a edição
-                    $postVideo = new VideoPost($post->getVideoUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
-                    $postVideo->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
-                    break;
-
-                case 'text':
-                    // Se for post de texto, cria uma instância de TextPost e delega a edição
-                    $postTexto = new TextPost($post->getTexto(), $post->getId(), $post->getStrategy());
-                    $postTexto->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
-                    break;
-
-                default:
-                    throw new Exception("Tipo de post inválido.");
-            }
-
-            echo "Post atualizado com sucesso!";
-        } else {
-            throw new Exception("Post não encontrado para editar.");
+        if (!$post) {
+            throw new Exception("Post com ID $postId não encontrado.");
         }
+
+        // Delegar a atualização com base no tipo
+        switch (get_class($post)) {
+            case 'TextPost':
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
+                break;
+            case 'ImagePost':
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
+                break;
+            case 'VideoPost':
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
+                break;
+            default:
+                throw new Exception("Tipo de post desconhecido.");
+        }
+
+        // Registrar log de atualização
+        $this->logger->update($post, 'updated');
     }
 
 

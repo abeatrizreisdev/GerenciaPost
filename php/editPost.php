@@ -1,14 +1,13 @@
 <?php
+// Incluir os arquivos necessários
 require_once __DIR__ . '/config/conexao.php';
 require_once __DIR__ . '/factory/TextPost.php';
 require_once __DIR__ . '/factory/ImagePost.php';
 require_once __DIR__ . '/factory/VideoPost.php';
 require_once __DIR__ . '/facade/PostManager.php'; // A classe que gerencia as atualizações
 
-$logger = new PostLogger();
-
-// Agora instancie o PostManager com o logger
-$postManager = new PostManager($logger);
+$postLogger = new PostLogger();
+$postManager = new PostManager($postLogger);
 // Verificar se o ID do post foi passado na URL
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
@@ -63,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'imagem' => $imagemUrl
     ];
 
-
+    // Instanciar o PostManager e delegar a atualização
     try {
         // Atualizar o post de acordo com seu tipo
         $postManager->editarPost($postId, $dados);
@@ -83,16 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="../css/geral.css">
-    <title>Visualização de Posts</title>
+    <title>Editar Post</title>
 </head>
-
 <body>
-    <header id="headerMain"></header>
-    <hr>
     <h1>Editar Post</h1>
     <form action="editPost.php?id=<?php echo $postId; ?>" method="POST" enctype="multipart/form-data">
         <label for="texto">Texto:</label>
@@ -109,7 +101,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <button type="submit">Atualizar Post</button>
     </form>
-
-    <script src="../js/header.js"></script>
 </body>
 </html>
