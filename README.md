@@ -65,46 +65,64 @@ Os padrões de projeto são fundamentais para criar sistemas robustos, organizad
 
 ## Estrutura do Projeto
 
-A estruturação das pastas está da seguinte forma:
+## Estrutura do Projeto
 
+O projeto está organizado nas seguintes pastas e arquivos:
 
-A estruturação das pastas está da seguinte forma:
+### 1. **/css**  
+   Contém os arquivos de estilo do site.
+   - `geral.css`: Estilos gerais que definem a aparência do site.
 
-├── /css
-│   └── geral.css                  # Estilos gerais do site
-│
-├── /js                            # Scripts JavaScript utilizados no site
-│   ├── btnEditarPost.js  
-│   ├── buscarPost.js  
-│   ├── header.js  
-│   └── notify.js           
-│
-├── /php                           # Scripts PHP que lidam com o backend
-│   ├── /config
-│   │   └── conexao.php            # Arquivo de conexão com o banco de dados
-│   ├── /facade
-│   │   └── PostManager.php        # Gerencia as operações relacionadas a posts
-│   ├── /factory
-│   │   ├── ImagePost.php          # Classe para posts de imagem
-│   │   ├── Post.php               # Classe base para posts
-│   │   ├── PostFactory.php        # Fábrica para criação de posts
-│   │   ├── TextPost.php           # Classe para posts de texto
-│   │   └── VideoPost.php          # Classe para posts de vídeo
-│   ├── /observer
-│   │   ├── PostLogger.php         # Implementação de log para posts
-│   │   └── PostObserver.php       # Interface para Observers
-│   ├── /strategy
-│   │   ├── ImagePostStrategy.php  # Estratégia para posts de imagem
-│   │   ├── PostStrategy.php       # Interface base para estratégias de posts
-│   │   ├── TextPostStrategy.php   # Estratégia para posts de texto
-│   │   └── VideoPostStrategy.php  # Estratégia para posts de vídeo
-│   ├── createPost.php             # Lógica para criação de post
-│   ├── editPost.php               # Lógica para editar post
-│   ├── home.php                   # Página inicial
-│   ├── readPost.php               # Lógica para exibição de post
-│   └── post.php                   # Lógica central para posts
-│
-├── /uploads                       # Pasta onde serão armazenados os arquivos de mídia (imagens, vídeos)
-├── /bancoDados.sql                # Arquivo SQL para o banco de dados
-├── /apresentação.pdf              # Apresentação PDF
-├── /README.md                     # Arquivo README com detalhes do projeto
+### 2. **/js**  
+   Contém os arquivos JavaScript utilizados para a interatividade e funcionalidades do frontend.
+   - `btnEditarPost.js`: Script para a edição de posts.
+   - `buscarPost.js`: Script para buscar posts.
+   - `header.js`: Script responsável pelo cabeçalho da página.
+   - `notify.js`: Script para notificações do sistema.
+
+### 3. **/php**  
+   Contém os arquivos PHP que gerenciam a lógica do backend, incluindo a interação com o banco de dados e as operações de post.
+   
+   - **/config**
+     - `conexao.php`: Arquivo de configuração responsável pela conexão com o banco de dados.
+   
+   - **/facade**
+     - `PostManager.php`: Implementa a lógica para gerenciar posts (criação, edição, exclusão, etc.) e atua como a fachada do sistema.
+
+   - **/factory**
+     - `ImagePost.php`: Classe que define a lógica para posts de imagem.
+     - `Post.php`: Classe base para os posts.
+     - `PostFactory.php`: Fábrica que cria instâncias de diferentes tipos de posts.
+     - `TextPost.php`: Classe que define a lógica para posts de texto.
+     - `VideoPost.php`: Classe que define a lógica para posts de vídeo.
+
+   - **/observer**
+     - `PostLogger.php`: Implementa o padrão Observer para registrar eventos relacionados aos posts (como criação, edição, etc.).
+     - `PostObserver.php`: Interface que define o padrão Observer para monitoramento de alterações em posts.
+
+   - **/strategy**
+     - `ImagePostStrategy.php`: Define a estratégia de validação e exibição para posts de imagem.
+     - `PostStrategy.php`: Interface base para as estratégias de posts.
+     - `TextPostStrategy.php`: Define a estratégia de validação e exibição para posts de texto.
+     - `VideoPostStrategy.php`: Define a estratégia de validação e exibição para posts de vídeo.
+
+   - Arquivos principais:
+     - `createPost.php`: Lógica para criação de um novo post.
+     - `editPost.php`: Lógica para edição de um post existente.
+     - `home.php`: Página inicial do projeto.
+     - `readPost.php`: Lógica para exibição de um post.
+     - `post.php`: Arquivo central de operações relacionadas a posts.
+
+### 4. **/uploads**  
+   Pasta onde são armazenados os arquivos de mídia (como imagens e vídeos) relacionados aos posts.
+
+### 5. **/bancoDados.sql**  
+   Arquivo SQL utilizado para criar o banco de dados e tabelas necessárias para o funcionamento do sistema.
+
+### 6. **/apresentação.pdf**  
+   Apresentação do projeto em formato PDF, com detalhes sobre a implementação e os padrões de projeto utilizados.
+
+### 7. **/README.md**  
+   Arquivo README com informações gerais sobre o projeto, como sua funcionalidade e detalhes de implementação.
+
+---
