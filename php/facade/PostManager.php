@@ -8,8 +8,7 @@ class PostManager
     private $logger;
 
     // Agora o construtor recebe um logger como parâmetro
-    public function __construct(PostLogger $logger)
-    {
+    public function __construct(PostLogger $logger) {
         $this->logger = $logger;
     }
 
@@ -129,6 +128,7 @@ class PostManager
 
         // Registrar log de atualização
         $this->logger->update($post, 'updated');
+
     }
 
 
@@ -143,8 +143,7 @@ class PostManager
     }
 
     // Retorna os logs registrados
-    public function getLogs()
-    {
+    public function getLogs() {
         return $this->logger->getLogs();
     }
 }

@@ -13,21 +13,19 @@ toastr.options = {
 };
 
 // Função para exibir uma notificação personalizada
-function showNotification(type) {
-    switch (type) {
+
+function showNotification(message, event) {
+    switch (event) {
         case 'created':
-            toastr.success("Post Criado Com Sucesso");  // Notificação de sucesso
+            toastr.success(message, "Post Criado");
             break;
         case 'updated':
-            toastr.info("Post Atualizado com Sucesso");  // Notificação de informação
+            toastr.info(message, "Post Atualizado");
             break;
         case 'deleted':
-            toastr.warning("Post Apagado com Sucesso");  // Notificação de alerta
+            toastr.warning(message, "Post Excluído");
             break;
         default:
-            toastr.info("Não identificado");  // Caso o tipo não seja identificado, exibe como informação
-            break;
+            toastr.error("Evento desconhecido", "Erro");
     }
 }
-
-// Teste da notificação (exemplo de criação de post)

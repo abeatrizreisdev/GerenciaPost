@@ -79,9 +79,7 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="../css/geral.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <title>Criar Post</title>
 </head>
 
@@ -122,40 +120,8 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
     <script src="../js/header.js"></script>
     <script src="../js/notify.js"></script>
-    <script>toastr.options = {
-            "closeButton": true,  // Exibe o botão de fechar
-            "debug": false,
-            "newestOnTop": true,  // As notificações mais recentes aparecem em cima
-            "progressBar": true,  // Exibe a barra de progresso
-            "positionClass": "toast-top-right",  // Posição da notificação
-            "preventDuplicates": true,  // Evita duplicação de notificações
-            "showDuration": "300",  // Duração de aparecimento da notificação (em milissegundos)
-            "hideDuration": "1000",  // Duração de desaparecimento da notificação (em milissegundos)
-            "timeOut": "5000",  // Tempo de exibição da notificação (em milissegundos)
-            "extendedTimeOut": "1000"
-        };
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-        // Teste da notificação
-        function showNotification(type) {
-            switch (type) {
-                case 'created':
-                    toastr.success("Post Criado Com Sucesso");  // Notificação de sucesso
-                    break;
-                case 'updated':
-                    toastr.info("Post Atualizado com Sucesso");  // Notificação de informação
-                    break;
-                case 'deleted':
-                    toastr.warning("Post Apagado com Sucesso");  // Notificação de alerta
-                    break;
-                default:
-                    toastr.info("Não identificado");  // Caso o tipo não seja identificado, exibe como informação
-                    break;
-            }
-        }
-
-        // Chama a função para mostrar a notificação
-        showNotification('created');  // Teste de criação
-    </script>
 </body>
 
 </html>

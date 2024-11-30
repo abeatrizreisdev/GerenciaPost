@@ -16,7 +16,7 @@ Este projeto utiliza quatro padrões de projeto principais para organizar e estr
 
 ---
 
-### 2. Facade (Estrutural)
+### 2. Façade (Estrutural)
 
 **Função**: O padrão **Facade** fornece uma interface simplificada para interações complexas entre classes ou subsistemas, escondendo a complexidade do backend para quem usa o frontend.
 
@@ -52,6 +52,15 @@ Este projeto utiliza quatro padrões de projeto principais para organizar e estr
 **Benefício**: Facilita a extensão do sistema para novos comportamentos sem modificar o código existente.
 
 ---
+
+### 5. Singleton (Criação)
+**Função**: É aplicado à classe `Database`, garante que haja apenas uma instância da classe e, consequentemente, uma única conexão com o banco de dados.
+
+**Implementação no projeto**:
+- O método getInstance() retorna a única instância da classe Database.
+- Os métodos __clone() e __wakeup() previnem a clonagem da instância, respectivamente. Esses métodos são privados e vazios, impedindo que novas instâncias sejam criadas a partir da existente.
+**Benefício**: Evita a abertura de múltiplas conexões, otimizando recursos e evitando sobrecarga no banco de dados.
+
 
 ## Por que usar padrões de projeto?
 
@@ -118,7 +127,7 @@ O projeto está organizado nas seguintes pastas e arquivos:
    Arquivo SQL utilizado para criar o banco de dados e tabelas necessárias para o funcionamento do sistema.
 
 ### 6. **/apresentação.pdf**  
-   Apresentação do projeto em formato PDF, com detalhes sobre a implementação e os padrões de projeto utilizados.
+   Apresentação do projeto em formato PDF.
 
 ### 7. **/README.md**  
    Arquivo README com informações gerais sobre o projeto, como sua funcionalidade e detalhes de implementação.
