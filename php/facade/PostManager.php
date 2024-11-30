@@ -19,7 +19,6 @@ class PostManager
         $post = PostFactory::createPost($type, $id, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
 
-        // Registro no logger
         $this->logger->update($post, 'created');
 
         return $post;
@@ -54,103 +53,98 @@ class PostManager
         return null;
     }
 
-    public function buscarPostsPorFiltro($tipo, $conteudo = '', $id, $texto, $imagemUrl, $videoUrl, $strategy)
+    public function buscarPostsPorFiltro($tipo, $conteudo = '')
     {
         try {
             $db = Database::getInstance();
             $sql = "";
             $params = [];
+
+            // Ajuste da consulta dependendo do tipo de filtro
             switch ($tipo) {
                 case 'all':
-                    // Buscar todos os campos das 3 tabelas (textPost, imagePost, videoPost)
-                    $sql = "SELECT id, texto, tipo, imagem_url, video_url FROM posts WHERE texto LIKE :conteudo";
+                    $sql = "SELECT id AS id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo
+                        UNION
+                        SELECT id AS id, imagem_url AS texto, 'image' AS tipo FROM imagePost WHERE imagem_url LIKE :conteudo
+                        UNION
+                        SELECT id AS id, video_url AS texto, 'video' AS tipo FROM videoPost WHERE video_url LIKE :conteudo";
                     break;
-                case 'TextPost':
-                    $post = new TextPost($texto, $id, $strategy);
-                    $posts = $post->readPost($conteudo);  // Chama o método da classe TextPost
-                    return $posts;
                 case 'image':
-                    $post = new ImagePost($id, $texto, $imagemUrl, $strategy);
-                    $posts = $post->readPost($conteudo);  // Chama o método da classe ImagePost
-                    return $posts;  // Retorna os posts encontrados
+                    $sql = "SELECT id AS id, imagem_url AS texto, 'image' AS tipo FROM imagePost WHERE imagem_url LIKE :conteudo";
+                    break;
+                case 'text':
+                    $sql = "SELECT id AS id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo";
+                    break;
                 case 'video':
-                    $post = new VideoPost($videoUrl, $texto, $id, $strategy);
-                    $posts = $post->readPost($conteudo);  // Chama o método da classe VideoPost
-                    return $posts;
+                    $sql = "SELECT id AS id, video_url AS texto, 'video' AS tipo FROM videoPost WHERE video_url LIKE :conteudo";
+                    break;
                 default:
-                    throw new Exception("Tipo de post desconhecido.");
+                    throw new Exception("Tipo de filtro inválido: $tipo");
             }
+            $params[':conteudo'] = '%' . $conteudo . '%';  // O parâmetro da busca
 
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);  // consulta com os parâmetros
+
+            //posts encontrados
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $resultados;
         } catch (PDOException $e) {
-            // Registra a exceção no log
+            // Usa o método log() para registrar a exceção
             $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
             return null;
         }
     }
 
-    public function editarPost($postId, $dados)
+
+    public function editarPost($postId, $novoTexto, $novaImagemUrl = null, $novoVideoUrl = null)
     {
-        // Buscar o post pelo ID
+        // Buscar o post por ID
         $post = $this->buscarPostPorId($postId);
 
-        if (!$post) {
-            throw new Exception("Post com ID $postId não encontrado.");
-        }
+        if ($post) {
+            // Verificar o tipo do post e delegar a edição para a classe específica
+            switch ($post->getTipo()) {
+                case 'image':
+                    // Se for post de imagem, cria uma instância de ImagePost e delega a edição
+                    $postImage = new ImagePost($post->getImagemUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postImage->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
+                    break;
 
-        // Delegar a atualização com base no tipo
-        switch (get_class($post)) {
-            case 'TextPost':
-                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
-                break;
-            case 'ImagePost':
-                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
-                break;
-            case 'VideoPost':
-                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
-                break;
-            default:
-                throw new Exception("Tipo de post desconhecido.");
-        }
+                case 'video':
+                    // Se for post de vídeo, cria uma instância de VideoPost e delega a edição
+                    $postVideo = new VideoPost($post->getVideoUrl(), $post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postVideo->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
+                    break;
 
-        // Registrar log de atualização
-        $this->logger->update($post, 'updated'); // Registra a atualização
+                case 'text':
+                    // Se for post de texto, cria uma instância de TextPost e delega a edição
+                    $postTexto = new TextPost($post->getTexto(), $post->getId(), $post->getStrategy());
+                    $postTexto->editarPost($novoTexto, $novoVideoUrl,$novaImagemUrl);
+                    break;
+
+                default:
+                    throw new Exception("Tipo de post inválido.");
+            }
+
+            echo "Post atualizado com sucesso!";
+        } else {
+            throw new Exception("Post não encontrado para editar.");
+        }
     }
 
 
 
-    public function deletePost($postId)
+
+    public function deletePost($post)
     {
-        // Buscar o post no banco de dados antes de excluir
-        $db = Database::getInstance();
-        $stmt = $db->prepare("SELECT * FROM posts WHERE id = :id");
-        $stmt->bindParam(':id', $postId);
-        $stmt->execute();
-        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $post->deleteFromDatabase();
+        $this->logger->update($post, 'deleted');  // Registra o log de exclusão
 
-        if (!$postData) {
-            throw new Exception("Post não encontrado.");
-        }
-
-        // Instancia o post de acordo com os dados do banco
-        switch ($postData['tipo']) {
-            case 'image':
-                $post = new ImagePost($postData['id'], $postData['texto'], $postData['imagem_url'], $postData['strategy']);
-                break;
-            case 'video':
-                $post = new VideoPost($postData['id'], $postData['texto'], $postData['video_url'], $postData['strategy']);
-                break;
-            case 'text':
-                $post = new TextPost($postData['id'], $postData['texto'], $postData['strategy']);
-                break;
-            default:
-                throw new Exception("Tipo de post desconhecido.");
-        }
-
-        // Chama o método delete da classe de post
-        $post->deletePost(); // Isso irá excluir o post e registrar o log
-        $this->logger->update($post, 'deleted'); // Registra a exclusão do post
-
+        return $post;
     }
+
     // Retorna os logs registrados
     public function getLogs()
     {
