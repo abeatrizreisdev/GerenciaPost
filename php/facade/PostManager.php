@@ -19,6 +19,7 @@ class PostManager
         $post = PostFactory::createPost($type, $id, $content, $imagemUrl, $videoUrl);
         $post->saveToDatabase();
 
+        // Registro no logger
         $this->logger->update($post, 'created');
 
         return $post;
@@ -53,33 +54,33 @@ class PostManager
         return null;
     }
 
-    public function buscarPostsPorFiltro($tipo, $conteudo = '',$id,$texto,$imagemUrl,$videoUrl,$strategy)
+    public function buscarPostsPorFiltro($tipo, $conteudo = '', $id, $texto, $imagemUrl, $videoUrl, $strategy)
     {
         try {
             $db = Database::getInstance();
             $sql = "";
             $params = [];
-            switch ($tipo){
+            switch ($tipo) {
                 case 'all':
                     // Buscar todos os campos das 3 tabelas (textPost, imagePost, videoPost)
                     $sql = "SELECT id, texto, tipo, imagem_url, video_url FROM posts WHERE texto LIKE :conteudo";
                     break;
                 case 'TextPost':
-                    $post = new TextPost($texto,$id,$strategy);
+                    $post = new TextPost($texto, $id, $strategy);
                     $posts = $post->readPost($conteudo);  // Chama o método da classe TextPost
-                    return $posts;  
-                    case 'image':
-                        $post = new ImagePost($id,$texto, $imagemUrl,$strategy);
-                        $posts = $post->readPost($conteudo);  // Chama o método da classe ImagePost
-                        return $posts;  // Retorna os posts encontrados
-                    case 'video':
-                        $post = new VideoPost($videoUrl,$texto, $id,$strategy);
-                        $posts = $post->readPost($conteudo);  // Chama o método da classe VideoPost
-                        return $posts;
+                    return $posts;
+                case 'image':
+                    $post = new ImagePost($id, $texto, $imagemUrl, $strategy);
+                    $posts = $post->readPost($conteudo);  // Chama o método da classe ImagePost
+                    return $posts;  // Retorna os posts encontrados
+                case 'video':
+                    $post = new VideoPost($videoUrl, $texto, $id, $strategy);
+                    $posts = $post->readPost($conteudo);  // Chama o método da classe VideoPost
+                    return $posts;
                 default:
                     throw new Exception("Tipo de post desconhecido.");
             }
-        
+
         } catch (PDOException $e) {
             // Registra a exceção no log
             $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
@@ -87,33 +88,34 @@ class PostManager
         }
     }
 
-    public function editarPost($postId, $dados) {
+    public function editarPost($postId, $dados)
+    {
         // Buscar o post pelo ID
         $post = $this->buscarPostPorId($postId);
-    
+
         if (!$post) {
             throw new Exception("Post com ID $postId não encontrado.");
         }
-    
+
         // Delegar a atualização com base no tipo
         switch (get_class($post)) {
             case 'TextPost':
-                $post->editarPost($dados['texto'],$dados['video'],$dados['imagem']);
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
                 break;
             case 'ImagePost':
-                $post->editarPost($dados['texto'],$dados['video'],$dados['imagem']);
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
                 break;
             case 'VideoPost':
-                $post->editarPost($dados['texto'],$dados['video'],$dados['imagem']);
+                $post->editarPost($dados['texto'], $dados['video'], $dados['imagem']);
                 break;
             default:
                 throw new Exception("Tipo de post desconhecido.");
         }
-    
+
         // Registrar log de atualização
-        $this->logger->log("updated");
+        $this->logger->update($post, 'updated'); // Registra a atualização
     }
-    
+
 
 
     public function deletePost($postId)
@@ -146,7 +148,7 @@ class PostManager
 
         // Chama o método delete da classe de post
         $post->deletePost(); // Isso irá excluir o post e registrar o log
-        $this->logger->update($post, 'deleted');
+        $this->logger->update($post, 'deleted'); // Registra a exclusão do post
 
     }
     // Retorna os logs registrados

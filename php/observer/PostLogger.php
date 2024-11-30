@@ -7,14 +7,11 @@ class PostLogger implements PostObserver {
     public function update(Post $post, $event) {
         $message = $this->generateLogMessage($post, $event);
         $this->logs[] = $message; // Adiciona a mensagem ao log
-        
-        // Debugging: Verificando o que está sendo adicionado ao log
-        echo "Log registrado: $message<br>"; // Adiciona um log diretamente no navegador
+
+        // Exibe a notificação bonita utilizando Toastr
+        echo "<script>showNotification('$message', '$event');</script>";
     }
-    public function log($message) {
-        // Aqui você pode escolher como deseja fazer o log (arquivo, banco de dados, etc.)
-        error_log($message); // Exemplo de log no arquivo de erro padrão
-    }
+
     private function generateLogMessage(Post $post, $event) {
         $timestamp = date('Y-m-d H:i:s');
         $postType = get_class($post);
@@ -31,11 +28,11 @@ class PostLogger implements PostObserver {
         
         switch ($event) {
             case 'created':
-                return "[$timestamp] Novo post criado: $postType ";
+                return "[$timestamp] Novo post criado: $postType - $conteudo";
             case 'updated':
-                return "[$timestamp] Post atualizado: $postType ";
+                return "[$timestamp] Post atualizado: $postType - $conteudo";
             case 'deleted':
-                return "[$timestamp] Post excluído: $postType ";
+                return "[$timestamp] Post excluído: $postType - $conteudo";
             default:
                 return "[$timestamp] Evento desconhecido.";
         }
