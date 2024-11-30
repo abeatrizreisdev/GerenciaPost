@@ -53,58 +53,39 @@ class PostManager
         return null;
     }
 
-    public function buscarPostsPorFiltro($tipo, $conteudo = '')
+    public function buscarPostsPorFiltro($tipo, $conteudo = '',$id,$texto,$imagemUrl,$videoUrl,$strategy)
     {
         try {
             $db = Database::getInstance();
             $sql = "";
             $params = [];
-
-            // Ajuste da consulta dependendo do tipo de filtro
-            switch ($tipo) {
+            switch ($tipo){
                 case 'all':
                     // Buscar todos os campos das 3 tabelas (textPost, imagePost, videoPost)
                     $sql = "SELECT id, texto, tipo, imagem_url, video_url FROM posts WHERE texto LIKE :conteudo";
                     break;
-                case 'image':
-                    // Consultar apenas os campos da tabela imagePost
-                    $sql = "SELECT id, texto, 'image' AS tipo, imagem_url FROM imagePost WHERE texto LIKE :conteudo";
-                    break;
-                case 'text':
-                    // Consultar apenas os campos da tabela textPost
-                    $sql = "SELECT id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo";
-                    break;
-                case 'video':
-                    // Consultar apenas os campos da tabela videoPost
-                    $sql = "SELECT id, texto, 'video' AS tipo, video_url FROM videoPost WHERE texto LIKE :conteudo";
-                    break;
+                case 'TextPost':
+                    $post = new TextPost($texto,$id,$strategy);
+                    $posts = $post->readPost($conteudo);  // Chama o método da classe TextPost
+                    return $posts;  
+                    case 'image':
+                        $post = new ImagePost($id,$texto, $imagemUrl,$strategy);
+                        $posts = $post->readPost($conteudo);  // Chama o método da classe ImagePost
+                        return $posts;  // Retorna os posts encontrados
+                    case 'video':
+                        $post = new VideoPost($videoUrl,$texto, $id,$strategy);
+                        $posts = $post->readPost($conteudo);  // Chama o método da classe VideoPost
+                        return $posts;
                 default:
-                    throw new Exception("Tipo de filtro inválido: $tipo");
+                    throw new Exception("Tipo de post desconhecido.");
             }
-
-            // Parâmetro de busca com o conteúdo
-            $params[':conteudo'] = '%' . $conteudo . '%';  // Parâmetro de busca no texto
-
-            // Preparar e executar a consulta
-            $stmt = $db->prepare($sql);
-            $stmt->execute($params);
-
-            // Resultados encontrados
-            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            // Retorna os resultados ou um array vazio caso não haja resultados
-            return $resultados ? $resultados : [];
-
+        
         } catch (PDOException $e) {
             // Registra a exceção no log
             $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
             return null;
         }
     }
-
-
-
-
 
     public function editarPost($postId, $dados) {
         // Buscar o post pelo ID
@@ -133,9 +114,6 @@ class PostManager
         $this->logger->log("updated");
     }
     
-
-
-
 
 
     public function deletePost($postId)

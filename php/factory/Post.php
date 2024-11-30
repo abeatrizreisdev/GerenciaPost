@@ -34,7 +34,7 @@ abstract class Post {
 
     abstract public function salvarPost();
     
-    abstract public function readPost();
+    abstract public function readPost($conteudo);
 
     abstract public function deletePost();
 

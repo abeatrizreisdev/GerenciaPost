@@ -69,10 +69,16 @@ class VideoPost extends Post
 
         echo "Vídeo salvo no banco de dados: " . $this->videoUrl . "\n";
     }
-    public function readPost()
+    public function readPost($conteudo)
     {
-
+        // A variável $conteudo é passada para a consulta SQL corretamente
+        $db = Database::getInstance();
+        $sql = "SELECT id, texto, 'video' AS tipo, video_url FROM videoPost WHERE texto LIKE :conteudo";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':conteudo' => "%" . $conteudo . "%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function editarPost($texto, $videoUrl, $imagemUrl) {
         try {
             // Obter a instância da conexão com o banco de dados

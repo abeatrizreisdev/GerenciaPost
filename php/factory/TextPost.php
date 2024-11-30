@@ -98,13 +98,14 @@ public function editarPost($texto, $videoUrl, $imagemUrl) {
     {
     }
 
-    public function readPost()
+    public function readPost($conteudo)
     {
+        // Garantindo que a variável $conteudo seja definida e usada corretamente
         $db = Database::getInstance();
-        $stmt = $db->prepare("SELECT * FROM textPost WHERE id = :id");
-        $stmt->bindValue(':id', $this->getId());
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT id, texto, 'text' AS tipo FROM textPost WHERE texto LIKE :conteudo";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':conteudo' => "%" . $conteudo . "%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function deletePost() {

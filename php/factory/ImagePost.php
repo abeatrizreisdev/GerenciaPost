@@ -50,7 +50,6 @@ class ImagePost extends Post
         return $this->id; // Retorna o valor da propriedade $id
     }
 
-
     public function saveToDatabase()
     {
         try {
@@ -78,9 +77,14 @@ class ImagePost extends Post
         }
     }
 
-    public function readPost()
+    public function readPost($conteudo)
     {
-
+        // A variável $conteudo é passada para a consulta SQL corretamente
+        $db = Database::getInstance();
+        $sql = "SELECT id, texto, 'image' AS tipo, imagem_url FROM imagePost WHERE texto LIKE :conteudo";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':conteudo' => "%" . $conteudo . "%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function editarPost($texto, $videoUrl, $imagemUrl)
     {
