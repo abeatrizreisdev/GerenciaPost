@@ -129,6 +129,7 @@ class ImagePost extends Post
         $stmt = $db->prepare("DELETE FROM imagePost WHERE id = :id");
         $stmt->bindParam(':id', $this->id);
         $stmt->execute();
+        
     }
 
 }

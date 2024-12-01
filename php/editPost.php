@@ -75,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Erro: " . $e->getMessage();
     }
 }
-echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 ?>
 
@@ -86,9 +85,6 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/geral.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <title>Editar Post</title>
 </head>
 
@@ -121,7 +117,6 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
     </form>
 
     <script src="../js/header.js"></script>
-    <script src="../js/notify.js"></script>
 
 </body>
 

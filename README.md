@@ -30,11 +30,11 @@ Este projeto utiliza quatro padrões de projeto principais para organizar e estr
 
 ### 3. Observer (Comportamental)
 
-**Função**: O padrão **Observer** é utilizado para notificar outros componentes do sistema sobre mudanças em um objeto de interesse, promovendo um sistema de eventos desacoplado.
+**Função**: O padrão **Observer** é utilizado para notificar no sistema mudanças em um objeto de interesse, promovendo um sistema de eventos desacoplado.
 
 **Implementação no projeto**:
 - A interface `PostObserver` define a estrutura básica para observadores.
-- A classe `PostLogger` implementa essa interface e é notificada sempre que um post é criado, atualizado ou excluído, registrando os eventos em um log.
+- A classe `PostLogger` implementa essa interface e é notificada sempre que um post é criado, registrando o evento em um log.
 
 **Benefício**: Permite adicionar novos comportamentos (como notificações ou auditorias) sem alterar as classes principais do sistema.
 

@@ -7,8 +7,6 @@ require_once __DIR__ . '/facade/PostManager.php'; // Importa o PostLogger
 // Instancia o logger
 $postLogger = new PostLogger();
 $postManager = new PostManager($postLogger);
-echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
-
 ?>
 
 
@@ -34,47 +32,37 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
         require_once __DIR__ . "/factory/PostFactory.php";
         require_once __DIR__ . '/observer/PostLogger.php'; // Importa o PostLogger
         
-        // Instancia o logger
-        $postLogger = new PostLogger();
 
-        // Variável para armazenar o conteúdo HTML dos posts
         $html = '<div class="ajustarMeio">';
         $html = '<br>';
 
         try {
-            // Conexão com o banco de dados e busca de todos os posts
             $db = Database::getInstance();
             $query = $db->query("SELECT * FROM posts");
             $posts = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            // Começa a criar o HTML para o containerPost logo após o header
-            $html .= ''; // Inicia a div containerPost
+
+            $html .= ''; 
         
-            // Itera sobre cada post para gerar o HTML correspondente
+
             foreach ($posts as $postData) {
-                // Instanciar o Post de acordo com o tipo
                 switch ($postData['tipo']) {
                     case 'image':
-                        // Instanciando a classe específica para posts de imagem
                         $post = new ImagePost($postData['id'], $postData['texto'], $postData['imagem_url'], new ImagePostStrategy());
                         break;
 
                     case 'video':
-                        // Instanciando a classe específica para posts de vídeo
                         $post = new VideoPost($postData['video_url'], $postData['texto'], $postData['id'], new VideoPostStrategy());
                         break;
 
                     case 'text':
-                        // Instanciando a classe específica para posts de texto
                         $post = new TextPost($postData['texto'], $postData['id'], new TextPostStrategy());
                         break;
 
                     default:
-                        // Caso o tipo de post seja desconhecido
                         throw new Exception("Tipo de post desconhecido.");
                 }
 
-                // Começa a criar o HTML para o post
                 if ($postData['tipo'] === 'image') {
                     $html .= '<div class="postImagem">';
                 } elseif ($postData['tipo'] === 'video') {
@@ -83,12 +71,10 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
                     $html .= '<div class="postTexto">';
                 }
     
-                // Conteúdo principal do post
                 $html .= $post->display();
                 $html .= "</div>";
             }
 
-            // Exibe o conteúdo HTML gerado para todos os posts dentro de containerPost
             echo $html;
 
         } catch (Exception $e) {
@@ -98,7 +84,6 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
     </div>
 
     <script src="../js/header.js"></script>
-    <script src="../js/notify.js"></script>
 
 </body>
 

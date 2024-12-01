@@ -79,7 +79,6 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="../css/geral.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <title>Criar Post</title>
 </head>
 
@@ -119,8 +118,6 @@ echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
     </form>
 
     <script src="../js/header.js"></script>
-    <script src="../js/notify.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 </body>
 

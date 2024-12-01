@@ -88,7 +88,6 @@ if (isset($_GET['id'])) {
         // Retorna sucesso
     }
 }
-echo "<pre><strong>Logs:</strong>\n" . $postManager->getLogs() . "</pre>";
 
 ?>
 

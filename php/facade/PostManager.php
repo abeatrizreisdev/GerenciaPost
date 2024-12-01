@@ -8,7 +8,8 @@ class PostManager
     private $logger;
 
     // Agora o construtor recebe um logger como parâmetro
-    public function __construct(PostLogger $logger) {
+    public function __construct(PostLogger $logger)
+    {
         $this->logger = $logger;
     }
 
@@ -95,8 +96,6 @@ class PostManager
             return $resultados ? $resultados : [];
 
         } catch (PDOException $e) {
-            // Registra a exceção no log
-            $this->logger->log("Erro ao buscar posts com filtro: " . $e->getMessage());
             return null;
         }
     }
@@ -126,9 +125,6 @@ class PostManager
                 throw new Exception("Tipo de post desconhecido.");
         }
 
-        // Registrar log de atualização
-        $this->logger->update($post, 'updated');
-
     }
 
 
@@ -137,13 +133,13 @@ class PostManager
     public function deletePost($post)
     {
         $post->deleteFromDatabase();
-        $this->logger->update($post, 'deleted');  // Registra o log de exclusão
 
         return $post;
     }
 
     // Retorna os logs registrados
-    public function getLogs() {
+    public function getLogs()
+    {
         return $this->logger->getLogs();
     }
 }
