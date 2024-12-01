@@ -277,8 +277,8 @@ TEXTOSTRATEGY */
     width: 50vw;
     height: 40vh;
     max-height: 50vh;
-    background-color: rgb(231, 231, 231);
-    border: 0.6vh solid rgb(251, 187, 187);
+    background-color: rgba(138, 213, 232, 0.894);
+    border: 0.6vh solid rgb(120, 121, 128);
     border-radius: 2vh;
     margin: 2vh;
 
